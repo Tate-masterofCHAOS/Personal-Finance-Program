@@ -28,7 +28,7 @@ root.columnconfigure(0, weight=1)  # Allow column expansion
 root.rowconfigure(0, weight=1)  # Allow row expansion
 
 # Create buttons that print stuff
-button1 = ttk.Button(mainframe, text='Say bleurgh', command=printer1).grid(column=1, row=2, sticky=E)
+button1 = ttk.Button(mainframe, text='Say bleurgh', command=printer1).grid(column=1, row=2, sticky=E) #Instead of printer1, use the function that the user asked for, make a menu on those files too
 button2 = ttk.Button(mainframe, text='Say goodbye', command=printer2).grid(column=1, row=3, sticky=E)
 
 # Create label for user instructions
