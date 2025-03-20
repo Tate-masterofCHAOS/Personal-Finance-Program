@@ -1,26 +1,28 @@
-#This is the menu, DON'T TOUCH IT! MY FILE!
-#Vincent's code
+import os
 
 from tkinter import *  # Import all Tkinter functions
 from tkinter import ttk  # Import themed Tkinter widgets
-from test import durg
 
-def main():
+def durg():
     # Create the main application window
     root = Tk()  
     root.title('Random')  # Set the window title
 
     # Make variables that can change and show things through .set()
-    print1 = 0
+    print1 = StringVar()
     print2 = StringVar()
 
     # Functions that set the variables
     def printer1():
-        root.destroy()  # Close the current window
-        Toplevel(durg())  # Create a new top-level window for the 'durg' function
+        print1.set('Durg!')
         
     def printer2():
-        print2.set('Goodbye!')
+        print2.set('Blurg!')
+
+    def printer3():
+        root.destroy()  # Close the current window
+        main_file_path = os.path.join(os.path.dirname(__file__), 'main.py')
+        Toplevel(os.system(f'python "{main_file_path}"'))
 
     # Create a main frame inside the window with padding
     # Padding values: Left (3), Top (3), Right (12), Bottom (12)
@@ -32,11 +34,9 @@ def main():
     root.rowconfigure(0, weight=1)  # Allow row expansion
 
     # Create buttons that print stuff
-    button1 = ttk.Button(mainframe, text='Say bleurgh', command=printer1)
-    button1.grid(column=1, row=2, sticky=E)
-
-    button2 = ttk.Button(mainframe, text='Say goodbye', command=printer2) # Instead of printer1, use the function that the user asked for, make a menu on those files too
-    button2.grid(column=1, row=3, sticky=E)
+    button1 = ttk.Button(mainframe, text='Say durg', command=printer1).grid(column=1, row=2, sticky=E) #Instead of printer1, use the function that the user asked for, make a menu on those files too
+    button2 = ttk.Button(mainframe, text='Say blurg', command=printer2).grid(column=1, row=3, sticky=E)
+    button3 = ttk.Button(mainframe, text='Back to menu', command=printer3).grid(column=1, row=4, sticky=E)
 
     # Create label for user instructions
     ttk.Label(mainframe, text='Please choose a function:').grid(column=2, row=1, sticky=N)
@@ -57,6 +57,3 @@ def main():
 
     # Start the Tkinter event loop (keeps the window open and responsive)
     root.mainloop()
-
-if __name__ == "__main__":
-    main()  # Call the main function to run the application
