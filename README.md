@@ -62,8 +62,8 @@ NOT USED FOR CLASS
 
 ## Author's Information
 ---
-    Vincent Johnson is an asipring python developer and is currently in highschool. He has made a lot of projects for school and involves himself in the cybersecurity community. He has been mentored by his father and uncle, who both work in the cybersecurity industry. He has some experience in Java and mainly codes using python.
-    
+Vincent Johnson is an asipring python developer and is currently in highschool. He has made a lot of projects for school and involves himself in the cybersecurity community. He has been mentored by his father and uncle, who both work in the cybersecurity industry. He has some experience in Java and mainly codes using python.
+
 Short paragraph about author (EACH member of the group has one)
 Includes contact information
 
