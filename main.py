@@ -22,23 +22,23 @@ def main(ended):
         # Functions that set the variables
         def budgeting_income():
             root.destroy()  # Close the current window
-            Toplevel(durg())  # Create a new top-level window for the 'durg' function
+            Tk(durg())  # Create a new top-level window for the 'durg' function
             
         def check_account():
             root.destroy()  # Close the current window
-            Toplevel(cam())  # Create a new top-level window for the 'menu' function
+            Tk(cam())  # Create a new top-level window for the 'menu' function
 
         def income_expense():
             root.destroy()  # Close the current window
-            Toplevel(bai())  # Create a new top-level window for the 'bai' function
+            Tk(bai())  # Create a new top-level window for the 'bai' function
 
         def crt_accnt():
             root.destroy()  # Close the current window
-            Toplevel(create())  # Create a new top-level window for the 'create' function
+            Tk(create())  # Create a new top-level window for the 'create' function
 
         def goals():
             root.destroy()  # Close the current window
-            Toplevel(gls())  # Create a new top-level window for the 'create' function
+            Tk(gls())  # Create a new top-level window for the 'create' function
 
         def end_program():
             nonlocal ended  # Use the nonlocal keyword to modify the outer variable
