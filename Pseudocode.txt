@@ -67,5 +67,29 @@ Sawyer's pseudocode:
 John's Pseudocode:
 
 Tate's pseudocode:
+DEFINE Budgeting
+    ASK user if it would like to see stats without charts
+        IF yes CAll the reading CSV function and save each value to a variable
+            Then CALCULATE the percentage each expense is of the income
+            DISPLAY the percentages and DISPLAY the remaing money as spending money
+        IF no get the data for the person and CALL the Reading CSV function
+            Then DISPLAY chart of expenses of budgeting
 
+DEFINE Income and expense tracking
+    DISPLAY a menu with four buttons, INCOME, EXPENSE, GET DATA, and EXIT
+    IF INCOMCE CLICKED
+        ASK user if it is from the past or present
+        IF past
+            ASK for date and time and CALL Updating Back Info to CSV function
+        IF PRESENT
+            CALL vincent's timestamp function, ASK how much money user got, and then CALL Updating Bank info to CSV function
+    IF EXPENSE CLICKED
+        CALL vincents timestamp function, ASK how much user has spent, and CALL updating bank info to CSV function
+    IF GET DATA CLICKED
+        CALL CSV checker functon
+        DISPLAY income gathered over desired time period
+        DISPlAY expenses spent over desired time period
+        DISPLAY net total
+    IF EXIT CLICKED
+        RETURN to main menu
 Vincent's pseudocode:
