@@ -1,5 +1,68 @@
 Sawyer's pseudocode:
-Booooo
+    Reading csv function
+        Get input of the persons name
+        Call CSV file exist checker function with the name
+
+        If it returns TRUE
+            Open the csv file
+            Set CSVReader to the file
+            Skip the first line in CSVReader
+
+            BankInfo = Empty list
+
+            For each line in CSVReader
+                If the line is general data
+                    Put the info into dicitonary
+                        "Total" as the total amount in the account
+                        "Goal Amount" as the goal they want to reach
+                        "Goal Type" as the type of goal
+                        "Rent Amount" as the amount spent on rent
+                        "Utilites Amount" as the amount spent on utilites
+                        "Food Amount" as the amount spent on food
+                        "Savings Amount" as the amount put into Savings
+                        "Date Last Accessed" os the last time the account was changed
+                        
+                    Append the dictionary to the list BankInfo
+                
+                If the line is income
+                    For each item in the line
+                        Split the item by "_"
+
+                        Put the info into dictionary
+                            "Date" as the date that it was added
+                            "Amount of Income" as the amount of money inputed
+                            "Money Type" as the type of currency the mony is
+                        
+                        Append the dictionary to the list BankInfo
+
+                If the line is expenses
+                    For each item in the line
+                        Split the item by "_"
+
+                        Put the info into dictionary
+                            "Date" as the date that it was added
+                            "Amount of Expenses" as the amount of expenses inputed
+                            "Money Type" as the type of currency the mony is
+                        
+                        Append the dictionary to the list BankInfo
+            
+            Return BankInfo
+
+
+    
+    CSV file exist checker function
+        try opening a csv file with the name
+
+        If it works 
+            return TRUE
+        Else 
+            Return FALSE
+        
+
+
+
+
+
 
 John's Pseudocode:
 
