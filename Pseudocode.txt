@@ -43,6 +43,7 @@ Sawyer's pseudocode:
                             "Date" as the date that it was added
                             "Amount of Expenses" as the amount of expenses inputed
                             "Money Type" as the type of currency the mony is
+                            "Expense Type" as the type of expense it is
                         
                         Append the dictionary to the list BankInfo
             
