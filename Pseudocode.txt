@@ -2,6 +2,22 @@ Sawyer's pseudocode:
 Booooo
 
 John's Pseudocode:
+FUNCTION display goal
+    INITIALIZE goals as empty dictionary
+    SET goals to CALL reading_csv function 
+
+    IF display goal
+        FOR goal, amount, progress in goals["goal type"] and goals["goal amount"] and goals["Total amount]
+        DISPLAY goal type and goal amount
+        DISPLAY Total amount of money
+    ELSE IF set goal
+        INPUT goal label
+        INPUT saving goal
+
+        APPEND goal label to goals["goal type"]
+        APPEND saving goal to goals["goal amount"]
+
+    SAVE goals to csv file
 
 Tate's pseudocode:
 
