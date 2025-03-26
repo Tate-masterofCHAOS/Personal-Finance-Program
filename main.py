@@ -5,10 +5,11 @@ from tkinter import *  # Import all Tkinter functions
 from tkinter import ttk  # Import themed Tkinter widgets
 
 from test import durg
-from budgeting_and_income import budget_nd_income as cam
+from budgeting_and_income import Baimenu as Bm
 from income_and_expense import menu as bai
 from create_account import create
 from goal import goals as gls
+from slct_prfl import Charts  # Import the Charts class from slct_prfl.py
 
 # Makes a variable to end the code
 ended = 0  # Initialize end to 0 to indicate the program is running
@@ -22,11 +23,15 @@ def main(ended):
         # Functions that set the variables
         def budgeting_income():
             root.destroy()  # Close the current window
-            Tk(durg())  # Create a new top-level window for the 'durg' function
+            Bm()  # Run the Charts function
+            nonlocal ended  # Use the nonlocal keyword to modify the outer variable
+            ended = 1  # Set ended to 1 to indicate the program has ended
             
         def check_account():
             root.destroy()  # Close the current window
-            Tk(cam())  # Create a new top-level window for the 'menu' function
+            #Tk(cam())  # Create a new top-level window for the 'menu' function
+            nonlocal ended  # Use the nonlocal keyword to modify the outer variable
+            ended = 1  # Set ended to 1 to indicate the program has ended
 
         def income_expense():
             root.destroy()  # Close the current window

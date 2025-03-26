@@ -1,68 +1,39 @@
 import os
-import pandas as pd
 import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox
-import matplotlib.pyplot as plt
-import numpy as np
-
 
 class Charts:
     def __init__(self):
+
+        csv_files = [f for f in os.listdir(os.path.dirname(__file__)) if f.endswith('.csv')]
+
+        # Create a new tkinter window to select a CSV file
         self.root = tk.Tk()
-        self.root.title('Charts')
+        self.root.title('Select CSV File for Pie Chart')
 
-        self.text_display = tk.Text(self.root, height=20, width=50, state=tk.DISABLED)
-        self.text_display.pack()
+        tk.Label(self.root, text='Select a CSV File:').pack(pady=5)
 
-        self.game_button = tk.Button(self.root, text='Start Game', command=self.start_game)
-        self.game_button.pack()
+        # Create a Listbox to display CSV file names
+        csv_listbox = tk.Listbox(self.root, height=10, width=50)
+        csv_listbox.pack(pady=5)
 
-        self.menu_button = tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu)
-        self.menu_button.pack()
+        # Populate the Listbox with CSV file names
+        for csv_file in csv_files:
+            csv_listbox.insert(tk.END, csv_file)
 
-        self.continue_button = None
-        self.valid_prfl = None
-        self.enmy_prfl = None
-        self.base_prfl = None
-        self.enmy_base_prfl = None
-        self.win = 1
-        self.turn = 1
+        def give_flepth():
+            flepath = csv_listbox.get(csv_listbox.curselection())
+            self.root.destroy()  # Close the current window
+            return flepath  # Return the selected file path
 
-    def update_display(self, text):
-        self.text_display.config(state=tk.NORMAL)
-        self.text_display.insert(tk.END, text + '\n')
-        self.text_display.config(state=tk.DISABLED)
+        # Create a button to select the currently selected CSV file
+        tk.Button(self.root, text='Select CSV File', command=give_flepth).pack(pady=10)
+        tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).pack(pady=10)
 
-
-def slct():
-    """Display a pie chart of a character's stats using Matplotlib."""
-    csv_files = [f for f in os.listdir(os.path.dirname(__file__)) if f.endswith('.csv')]
-
-    # Create a new tkinter window to select a CSV file
-
-    root = tk.Tk()
-    root.withdraw()  # Hide the root window
-
-    selection_window = tk.Toplevel()
-    selection_window.title('Select CSV File for Pie Chart')
-
-    tk.Label(selection_window, text='Select a CSV File:').pack(pady=5)
-
-    # Create a Listbox to display CSV file names
-    csv_listbox = tk.Listbox(selection_window, height=10, width=50)
-    csv_listbox.pack(pady=5)
-
-    # THIS MAKES THE ITEMS IN THE LIST TO SELECT
-    for csv_file in csv_files:
-        csv_listbox.insert(tk.END, csv_file)
+        # Handle window close event
+        self.root.protocol("WM_DELETE_WINDOW", lambda: self.root.destroy())
     
-    def give_flepth():
-        flepath = csv_listbox.get(csv_listbox.curselection())
-
-    # THIS ONE CREATES A BUTTON THAT RUNS THE FUNCTION, SELECTING THE CURRENTLY SELECTED CSV FILE
-    tk.Button(selection_window, text='Select CSV File', command=give_flepth).pack(pady=10)
-
-    # Keep the tkinter main loop running
-    selection_window.protocol("WM_DELETE_WINDOW", lambda: selection_window.destroy())
-    root.mainloop()
+    def restart_main_menu(self):
+        """Return to the main menu."""
+        self.root.destroy()  # Close the current game window
+        from main import main  # Import the main menu function
+        main(0)  # Restart the main menu
