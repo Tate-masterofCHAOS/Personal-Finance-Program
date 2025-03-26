@@ -109,7 +109,6 @@ FUNCTION display goal
     SET total to total amount of money
 
     INITIALIZE progress as empty list
-    
     IF display goal
         FOR goal, amount, progress in DICTIONARY goals of KEY goal type and DICTIONARY goals of KEY goal amount
             DISPLAY goal type and goal amount
