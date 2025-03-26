@@ -73,12 +73,13 @@ FUNCTION display goal
     SET total to total amount of money
 
     INITIALIZE progress as empty list
+    
     IF display goal
-        FOR goal, amount, progress in goals["goal type"] and goals["goal amount"] 
+        FOR goal, amount, progress in DICTIONARY goals of KEY goal type and DICTIONARY goals of KEY goal amount
             DISPLAY goal type and goal amount
-            SET total to total - goals["goal amount"]
+            SET total to total - amount
             IF total is greater than or equal to 0
-                APPEND goals["goal amount"] to progress
+                APPEND amount to progress
             ELSE IF total is less than 0 
                 APPEND total to progres
         DISPLAY progress
@@ -87,8 +88,8 @@ FUNCTION display goal
         INPUT goal label
         INPUT saving goal
 
-        APPEND goal label to goals["goal type"]
-        APPEND saving goal to goals["goal amount"]
+        APPEND goal label to DICTIONARY goals of KEY goal type
+        APPEND saving goal to DICTIONARY goals of KEY goal amount
 
     SAVE goals to csv file
 
