@@ -6,10 +6,19 @@ FUNCTION display goal
     INITIALIZE goals as empty dictionary
     SET goals to CALL reading_csv function 
 
+    SET total to total amount of money
+
+    INITIALIZE progress as empty list
     IF display goal
-        FOR goal, amount, progress in goals["goal type"] and goals["goal amount"] and goals["Total amount]
-        DISPLAY goal type and goal amount
-        DISPLAY Total amount of money
+        FOR goal, amount, progress in goals["goal type"] and goals["goal amount"] 
+            DISPLAY goal type and goal amount
+            SET total to total - goals["goal amount"]
+            IF total is greater than or equal to 0
+                APPEND goals["goal amount"] to progress
+            ELSE IF total is less than 0 
+                APPEND total to progres
+        DISPLAY progress
+
     ELSE IF set goal
         INPUT goal label
         INPUT saving goal
