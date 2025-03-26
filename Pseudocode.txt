@@ -48,6 +48,9 @@ Sawyer's pseudocode:
                         Append the dictionary to the list BankInfo
             
             Return BankInfo
+        Else
+            Print that the file does not exist
+            Return
 
 
     
@@ -58,7 +61,40 @@ Sawyer's pseudocode:
             return TRUE
         Else 
             Return FALSE
+
+
+    Creating new csv function
+        Line1 = The info for line one
+        Line2 = Info for line two
+        Line3 = Info for line three
+        Lines = list of Line1, Line2, Line3
         
+        file_path = File path with the person's name
+
+        Open a file in mode write with the file path file_path as file
+            Set writer = csv writer of file
+            Write rows(Lines)
+        return
+
+    
+    Updating Bank info function
+        Get input of the persons name
+        Call CSV file exist checker function with the name
+
+        If it returns TRUE
+            Open the csv as write
+                New_Line1 = The line1 that has been changed
+                New_Line2 = The line2 that has been changed
+                New_Line3 = The line3 that has been changed
+                Lines = New_Line1, New_Line2, New_Line3
+
+                Set writer = csv writer of file
+                Write rows(Lines)
+                Return
+        Else
+            Print that the file does not exist
+            Return
+            
 
 
 
