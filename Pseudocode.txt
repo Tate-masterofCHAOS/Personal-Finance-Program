@@ -102,6 +102,32 @@ Sawyer's pseudocode:
 
 
 John's Pseudocode:
+FUNCTION display goal
+    INITIALIZE goals as empty dictionary
+    SET goals to CALL reading_csv function 
+
+    SET total to total amount of money
+
+    INITIALIZE progress as empty list
+    
+    IF display goal
+        FOR goal, amount, progress in DICTIONARY goals of KEY goal type and DICTIONARY goals of KEY goal amount
+            DISPLAY goal type and goal amount
+            SET total to total - amount
+            IF total is greater than or equal to 0
+                APPEND amount to progress
+            ELSE IF total is less than 0 
+                APPEND total to progres
+        DISPLAY progress
+
+    ELSE IF set goal
+        INPUT goal label
+        INPUT saving goal
+
+        APPEND goal label to DICTIONARY goals of KEY goal type
+        APPEND saving goal to DICTIONARY goals of KEY goal amount
+
+    SAVE goals to csv file
 
 Tate's pseudocode:
 DEFINE Budgeting
