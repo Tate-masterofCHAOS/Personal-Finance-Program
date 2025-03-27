@@ -1,13 +1,13 @@
 import os
 import tkinter as tk
-from slct_prfl import Charts  # Import the Charts class from slct_prfl.py
+from slct_prfl import Slct
 
 import pandas as pd
 
 class Baimenu:
     def __init__(self):
 
-        file_path = Charts()
+        file_path = Slct()
         # ROWS 3-4
 
         # Create a new tkinter window to select a CSV file
@@ -21,10 +21,10 @@ class Baimenu:
         income.pack(pady=5)
 
         # Populate the Listbox with CSV file names
-        for item in csv file row 3:
+        #for item in csv file row 3:
 
-            item.replace('_', '   ')
-            income.insert(tk.END, item.split('_'))
+        #    item.replace('_', '   ')
+        #    income.insert(tk.END, item.split('_'))
 
         # Create a button to go back to the main menu
         tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).pack(pady=10)

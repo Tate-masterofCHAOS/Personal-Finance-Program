@@ -5,7 +5,7 @@ from tkinter import ttk
 from tkinter import messagebox
 import matplotlib.pyplot as plt
 import numpy as np
-input()
+
 class Charts:
     def __init__(self):
         self.root = tk.Tk()
@@ -120,6 +120,3 @@ def matplotlib_display_pie_chart():
     # Keep the tkinter main loop running
     selection_window.protocol("WM_DELETE_WINDOW", lambda: selection_window.destroy())
     root.mainloop()
-
-if __name__ == "__main__":
-    matplotlib_display_pie_chart()

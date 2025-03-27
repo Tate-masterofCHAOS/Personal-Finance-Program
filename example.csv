@@ -1,7 +1,7 @@
-Total amount_Type of currency, Goal amount_Goal type, Date last accessed
-SOME AMOUNT OF expenses_Expense type
-Dates of income_How much income_Type of currency
-Dates of expense_How much expense_Type of currency
+Total amount, Type of currency, Goal amount, Date last accessed
+SOME AMOUNT OF expenses
+Dates of income_How much income
+Dates of expense_How much expense
 
 01-01-2001_900_USD, 02-01-2001_230_USD, ect
 

@@ -1,7 +1,8 @@
 import os
 import tkinter as tk
+from create_account import CAmenu
 
-class Charts:
+class Slct:
     def __init__(self):
 
         csv_files = [f for f in os.listdir(os.path.dirname(__file__)) if f.endswith('.csv')]
@@ -28,6 +29,7 @@ class Charts:
         # Create a button to select the currently selected CSV file
         tk.Button(self.root, text='Select CSV File', command=give_flepth).pack(pady=10)
         tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).pack(pady=10)
+        tk.Button(self.root, text='Create new account', command=self.restart_main_menu).pack(pady=10)
 
         # Handle window close event
         self.root.protocol("WM_DELETE_WINDOW", lambda: self.root.destroy())

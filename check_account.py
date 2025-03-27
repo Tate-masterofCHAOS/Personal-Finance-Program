@@ -1,10 +1,10 @@
 import os
 import tkinter as tk
-from slct_prfl import Slct
+from slct_prfl import Slct  # Import the Charts class from slct_prfl.py
 
 import pandas as pd
 
-class Gmenu:
+class Chk:
     def __init__(self):
 
         file_path = Slct()
