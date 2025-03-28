@@ -1,125 +1,80 @@
 import os
-import pandas as pd
 import tkinter as tk
-from tkinter import ttk
 from tkinter import messagebox
 import matplotlib.pyplot as plt
-import numpy as np
-input()
+
+
 class Charts:
-    def __init__(self):
-        self.root = tk.Tk()
+    def __init__(self, root):
+        self.root = root
         self.root.title('Charts')
+        self.csv_files = []  # To store the list of CSV files
+        self.create_ui()
 
-        self.text_display = tk.Text(self.root, height=20, width=50, state=tk.DISABLED)
-        self.text_display.pack()
+    def create_ui(self):
+        # Find all CSV files in the current directory
+        self.csv_files = [f for f in os.listdir(os.path.dirname(__file__)) if f.endswith('.csv')]
 
-        self.game_button = tk.Button(self.root, text='Start Game', command=self.start_game)
-        self.game_button.pack()
+        # Create a Listbox to display CSV file names
+        self.csv_listbox = tk.Listbox(self.root, height=10, width=50)
+        self.csv_listbox.pack(pady=5)
 
-        self.menu_button = tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu)
-        self.menu_button.pack()
+        # Populate the Listbox with CSV file names
+        for csv_file in self.csv_files:
+            self.csv_listbox.insert(tk.END, csv_file)
 
-        self.continue_button = None
-        self.valid_prfl = None
-        self.enmy_prfl = None
-        self.base_prfl = None
-        self.enmy_base_prfl = None
-        self.win = 1
-        self.turn = 1
+        # Create a button to select the currently selected CSV file
+        tk.Button(self.root, text='Select CSV File', command=self.generate_pie_chart).pack(pady=10)
 
-    def update_display(self, text):
-        self.text_display.config(state=tk.NORMAL)
-        self.text_display.insert(tk.END, text + '\n')
-        self.text_display.config(state=tk.DISABLED)
+        # Create a button to go back to the main menu
+        tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).pack(pady=10)
 
-
-
-def matplotlib_display_pie_chart():
-    """Display a pie chart of a character's stats using Matplotlib."""
-    csv_files = [f for f in os.listdir(os.path.dirname(__file__)) if f.endswith('.csv')]
-
-    # Create a new tkinter window to select a CSV file
-
-    root = tk.Tk()
-    root.withdraw()  # Hide the root window
-
-    selection_window = tk.Toplevel()
-    selection_window.title('Select CSV File for Pie Chart')
-
-    tk.Label(selection_window, text='Select a CSV File:').pack(pady=5)
-
-    # Create a Listbox to display CSV file names
-    csv_listbox = tk.Listbox(selection_window, height=10, width=50)
-    csv_listbox.pack(pady=5)
-
-    # THIS MAKES THE ITEMS IN THE LIST TO SELECT
-    for csv_file in csv_files:
-        csv_listbox.insert(tk.END, csv_file)
-
-    def generate_pie_chart():
-        # Get the selected CSV file
-        selected_index = csv_listbox.curselection()
-        if not selected_index:
+    def generate_pie_chart(self):
+        # Get the selected file index from the Listbox
+        selected_file_index = self.csv_listbox.curselection()
+        if not selected_file_index:
             messagebox.showerror('Error', 'Please select a CSV file!')
             return
 
-        selected_csv = csv_files[selected_index[0]]
+        # Get the selected file name
+        selected_file_name = self.csv_listbox.get(selected_file_index[0])
 
-        # Load the selected CSV file into a DataFrame
-        csv_path = os.path.join(os.path.dirname(__file__), selected_csv)
-        df = pd.read_csv(csv_path)
+        # Construct the full file path
+        file_path = os.path.join(os.path.dirname(__file__), selected_file_name)
 
-        # Create a new tkinter window to select a character
-        character_selection_window = tk.Toplevel()
-        character_selection_window.title('Select Character for Pie Chart')
+        input()
 
-        tk.Label(character_selection_window, text='Select a Character:').pack(pady=5)
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+            income = lines[2].strip().split(',')  # Access the desired line
+            expense = lines[3].strip().split(',')
 
-        # Create a Listbox to display character names
-        character_listbox = tk.Listbox(character_selection_window, height=10, width=50)
-        character_listbox.pack(pady=5)
+        print(income)
+        print(expense)
 
-        # Populate the Listbox with character names
-        for name in df['NAME']:
-            character_listbox.insert(tk.END, name)
+        income_r = []
+        expense_r = []
 
-        def generate_character_pie_chart():
-            # Get the selected character
-            selected_character_index = character_listbox.curselection()
-            if not selected_character_index:
-                messagebox.showerror('Error', 'Please select a character!')
-                return
+        for item in income:
+            item = item.split('_')
+            income_r.append(item)
 
-            character_name = df['NAME'].iloc[selected_character_index[0]]
+        for item in expense:
+            item = item.split('_')
+            expense_r.append(item)
+        print(income_r)
+        print(expense_r)
 
-            # Filter the DataFrame for the selected character
-            character_data = df[df['NAME'] == character_name]
+        print('HECK YESSSSSSSSSS')
 
-            # Extract stats for the character
-            stats = ['DAMAGE', 'ARMOUR', 'DODGE', 'HEALTH', 'REGEN']
-            values = character_data[stats].iloc[0].tolist()
+    def restart_main_menu(self):
+        """Return to the main menu."""
+        self.root.destroy()  # Close the current window
+        from main import main  # Import the main menu function
+        main(0)  # Restart the main menu
 
-            # Create a pie chart
-            plt.figure(figsize=(6, 6))
-            plt.pie(values, labels=stats, autopct='%1.1f%%', startangle=140, colors=plt.cm.Paired(np.linspace(0, 1, len(stats))))
-            plt.title(f"{character_name}'s Stats")
-            plt.show()
-
-            # Close the character selection window after generating the chart
-            character_selection_window.destroy()
-
-        tk.Button(character_selection_window, text='Generate Pie Chart', command=generate_character_pie_chart).pack(pady=10)
-
-        # Close the CSV selection window
-        selection_window.destroy()
-
-    # THIS ONE CREATES A BUTTON THAT RUNS THE FUNCTION, SELECTING THE CURRENTLY SELECTED CSV FILE
-    tk.Button(selection_window, text='Select CSV File', command=generate_pie_chart).pack(pady=10)
-
-    # Keep the tkinter main loop running
-    selection_window.protocol("WM_DELETE_WINDOW", lambda: selection_window.destroy())
-    root.mainloop()
 
 if __name__ == "__main__":
-    matplotlib_display_pie_chart()
+    root = tk.Tk()
+    app = Charts(root)
+    root.mainloop()
