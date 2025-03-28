@@ -11,6 +11,7 @@ from income_and_expense import Baimenu as bai
 from goal import Gmenu as gls
 from chart import Charts  # Import the Charts class from slct_prfl.py
 from create_account import CAmenu  # Import the CAmenu class from create_account.py
+from check_account import Chk  # Import the Chk class from check_account.py
 
 # Makes a variable to end the code
 ended = 0  # Initialize end to 0 to indicate the program is running
@@ -24,35 +25,40 @@ def main(ended):
         def check_account():
             root.destroy()  # Close the current window
             new_root = Tk()  # Create a new Tkinter root window
-            CAmenu(new_root)  # Pass the new root window to CAmenu
+            Chk(new_root)  # Pass the new root to new function
             nonlocal ended  # Use the nonlocal keyword to modify the outer variable
             ended = 1  # Set ended to 1 to indicate the program has ended
 
         def income_expense():
             root.destroy()  # Close the current window
-            bai()  # Create a new top-level window for the 'bai' function
+            new_root = Tk()  # Create a new Tkinter root window
+            bai(new_root)  # Pass the new root to new function
             nonlocal ended  # Use the nonlocal keyword to modify the outer variable
             ended = 1  # Set ended to 1 to indicate the program has ended
 
         def crt_accnt():
             root.destroy()  # Close the current window
+            new_root = Tk()  # Create a new Tkinter root window
+            CAmenu(new_root)  # Pass the new root window to CAmenu
             nonlocal ended  # Use the nonlocal keyword to modify the outer variable
             ended = 1  # Set ended to 1 to indicate the program has ended
 
         def goals():
             root.destroy()  # Close the current window
-            gls()  # Create a new top-level window for the 'create' function
+            new_root = Tk()  # Create a new Tkinter root window
+            gls(new_root)  # Pass the new root to new function
             nonlocal ended  # Use the nonlocal keyword to modify the outer variable
             ended = 1  # Set ended to 1 to indicate the program has ended
 
         def end_program():
+            root.destroy()  # Close the current window
             nonlocal ended  # Use the nonlocal keyword to modify the outer variable
             ended = 1  # Set ended to 1 to indicate the program has ended
-            root.destroy()  # Close the current window
 
         def chrts():
             root.destroy()  # Close the current window
-            Charts()  # Run the Charts function
+            new_root = Tk()  # Create a new Tkinter root window
+            Charts(new_root)  # Pass the new root to new function
             nonlocal ended  # Use the nonlocal keyword to modify the outer variable
             ended = 1  # Set ended to 1 to indicate the program has ended
 
