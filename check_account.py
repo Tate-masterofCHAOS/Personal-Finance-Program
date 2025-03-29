@@ -14,7 +14,7 @@ class Chk:
         self.root = tk.Tk()
         self.root.title('Title')
 
-        #txt = CSV file row 1 col 2
+        #txt = CSV file row 1 col 1
 
         #tk.Label(self.root, text=txt).pack(pady=5)
 

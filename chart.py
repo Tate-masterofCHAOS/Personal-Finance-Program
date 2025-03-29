@@ -2,79 +2,59 @@ import os
 import tkinter as tk
 from tkinter import messagebox
 import matplotlib.pyplot as plt
+import csv
+from slct_prfl import Slct  # Import the Slct class from slct_prfl.py
 
 
 class Charts:
     def __init__(self, root):
-        self.root = root
-        self.root.title('Charts')
-        self.csv_files = []  # To store the list of CSV files
-        self.create_ui()
+        file_path = Slct().selected_file
+        print(f"Selected file path: {file_path}")
 
-    def create_ui(self):
-        # Find all CSV files in the current directory
-        self.csv_files = [f for f in os.listdir(os.path.dirname(__file__)) if f.endswith('.csv')]
+        # Initialize an empty list to store all rows
+        self.data_rows = []
 
-        # Create a Listbox to display CSV file names
-        self.csv_listbox = tk.Listbox(self.root, height=10, width=50)
-        self.csv_listbox.pack(pady=5)
+        # Proceed with using the file path
+        if file_path:
+            with open(file_path, 'r') as file:
+                reader = csv.reader(file)
+                # Read all rows and store them in self.data_rows
+                self.data_rows = [row for row in reader]
+            self.generate_pie_chart()
 
-        # Populate the Listbox with CSV file names
-        for csv_file in self.csv_files:
-            self.csv_listbox.insert(tk.END, csv_file)
-
-        # Create a button to select the currently selected CSV file
-        tk.Button(self.root, text='Select CSV File', command=self.generate_pie_chart).pack(pady=10)
-
-        # Create a button to go back to the main menu
-        tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).pack(pady=10)
+        self.root.mainloop()
+        self.root.destroy()  # Destroy the window after mainloop ends
 
     def generate_pie_chart(self):
-        # Get the selected file index from the Listbox
-        selected_file_index = self.csv_listbox.curselection()
-        if not selected_file_index:
-            messagebox.showerror('Error', 'Please select a CSV file!')
-            return
+        # Ensure there are enough rows in the data
+        if len(self.data_rows) > 1:
+            # Assuming the second row contains expense data
+            expenses = self.data_rows[1]  # Example: ['100_food', '200_rent', ...]
 
-        # Get the selected file name
-        selected_file_name = self.csv_listbox.get(selected_file_index[0])
+            labels = []
+            sizes = []
 
-        # Construct the full file path
-        file_path = os.path.join(os.path.dirname(__file__), selected_file_name)
+            # Process each item in the expenses row
+            for item in expenses:
+                # Split the string (e.g., '100_food') into size and label
+                size, label = item.split('_')
+                labels.append(label)  # Add the label to the labels list
+                sizes.append(int(size))  # Add the size (converted to int) to the sizes list
 
-        input()
+            # Check if the total is valid
+            total = sum(sizes)
+            if total <= 0:
+                messagebox.showerror("Error", "Total amount is less than or equal to zero.")
+                return
 
-        with open(file_path, 'r') as file:
-            lines = file.readlines()
-            income = lines[2].strip().split(',')  # Access the desired line
-            expense = lines[3].strip().split(',')
-
-        print(income)
-        print(expense)
-
-        income_r = []
-        expense_r = []
-
-        for item in income:
-            item = item.split('_')
-            income_r.append(item)
-
-        for item in expense:
-            item = item.split('_')
-            expense_r.append(item)
-        print(income_r)
-        print(expense_r)
-
-        print('HECK YESSSSSSSSSS')
+            # Generate the pie chart
+            plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+            plt.title('Pie Chart of Expenses')
+            plt.show()
+    
 
     def restart_main_menu(self):
         """Return to the main menu."""
-        self.root.destroy()  # Close the current window
+        self.root.destroy()  # Destroy the current window
         from main import main  # Import the main menu function
         main(0)  # Restart the main menu
-
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = Charts(root)
-    root.mainloop()
