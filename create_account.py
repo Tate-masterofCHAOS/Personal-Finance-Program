@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import ttk  # Import themed Tkinter widgets
 from datetime import datetime
 import pandas as pd
+import csv
 from tkinter import messagebox
 
 class CAmenu:
@@ -16,6 +17,7 @@ class CAmenu:
         self.goal_amnt = tk.StringVar()
         self.date_access = datetime.now().strftime('%Y-%m-%d')
         self.data_frame = None
+        self.callback = None
 
         # Create UI elements
         self.create_ui()
@@ -48,7 +50,7 @@ class CAmenu:
 
         # Type of Currency
         tk.Label(self.root, text='Type of currency:').grid(row=3, column=0, pady=5, sticky='e')
-        ttk.Combobox(self.root, values=["USD", "EUR", "GBP", "JPY"], state='readonly').grid(row=3, column=1, pady=5, sticky='w')
+        ttk.Combobox(self.root, textvariable=self.type, values=["USD", "EUR", "GBP", "JPY"], state='readonly').grid(row=3, column=1, pady=5, sticky='w')
 
         # Goal Amount
         tk.Label(self.root, text='Goal amount:').grid(row=4, column=0, pady=5, sticky='e')
@@ -60,27 +62,45 @@ class CAmenu:
         tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).grid(row=5, column=0, pady=10)
 
     def submit_information(self):
-        """Validate and return the entered information."""
+        """Validate and save the entered information to a CSV file."""
         try:
+            current_dir = os.path.dirname(__file__)
+
+            # List all CSV files in the current directory
+            csv_files = [f for f in os.listdir(current_dir) if f.endswith('.csv')]
+            if f'{self.acnt_name.get()}_account.csv' in csv_files:
+                tk.messagebox.showerror("Error", "Account name already exists. Please choose a different name.")
+                return CAmenu(self.root)
+
             # Convert total amount and goal amount to floats
             total_amnt_float = float(self.total_amnt.get())
             goal_amnt_float = float(self.goal_amnt.get())
 
-            # Collect the data
-            data = {
-                "account_name": self.acnt_name.get(),
-                "total_amount": total_amnt_float,
-                "currency_type": self.type.get(),
-                "goal_amount": goal_amnt_float,
-                "date_accessed": self.date_access,
-            }
+            # Collect the data as a list of values (no labels)
+            data = [
+                total_amnt_float.round(2),
+                self.type.get(),
+                goal_amnt_float.round(2),
+                self.date_access,
+            ]
 
-            # Pass the data to the callback function
-            self.callback(data)
+            # Save the data to a new CSV file without labels
+            file_name = f"{self.acnt_name.get()}_account.csv"
+            with open(file_name, "w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerow(data)  # Write the data as a single row
 
-            # Close the window
-            self.root.destroy()
+            # Show a success message
+            tk.messagebox.showinfo("Success", f"Account information saved to {file_name}!")
 
+            # Call the callback function if it exists
+            if self.callback:
+                self.callback(data)
+            self.restart_main_menu()  # Restart the main menu after saving
+
+        except FileNotFoundError:   
+            # Show an error message if the file is not found
+            tk.messagebox.showerror("Error", "File not found. Please check the file path.")
         except ValueError:
             # Show an error message if conversion fails
             tk.messagebox.showerror("Invalid Input", "Total amount and Goal amount must be valid numbers.")

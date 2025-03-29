@@ -4,8 +4,11 @@ from create_account import CAmenu
 
 class Slct:
     def __init__(self):
+        # Get the directory of the current script
+        current_dir = os.path.dirname(__file__)
 
-        csv_files = [f for f in os.listdir(os.path.dirname(__file__)) if f.endswith('.csv')]
+        # List all CSV files in the current directory
+        csv_files = [f for f in os.listdir(current_dir) if f.endswith('.csv')]
 
         # Create a new tkinter window to select a CSV file
         self.root = tk.Tk()
@@ -22,9 +25,11 @@ class Slct:
             csv_listbox.insert(tk.END, csv_file)
 
         def give_flepth():
-            flepath = csv_listbox.get(csv_listbox.curselection())
-            self.root.destroy()  # Close the current window
-            return flepath  # Return the selected file path
+            # Get the selected file name
+            selected_file_name = csv_listbox.get(csv_listbox.curselection())
+            # Construct the full file path
+            self.selected_file = os.path.join(current_dir, selected_file_name)
+            self.root.quit()  # Exit the mainloop instead of destroying the window
 
         # Create a button to select the currently selected CSV file
         tk.Button(self.root, text='Select CSV File', command=give_flepth).pack(pady=10)
@@ -33,7 +38,11 @@ class Slct:
 
         # Handle window close event
         self.root.protocol("WM_DELETE_WINDOW", lambda: self.root.destroy())
-    
+        self.selected_file = None
+
+        self.root.mainloop()
+        self.root.destroy()  # Destroy the window after mainloop ends
+
     def restart_main_menu(self):
         """Return to the main menu."""
         self.root.destroy()  # Close the current game window

@@ -9,6 +9,7 @@ import pandas as pd
 
 from income_and_expense import Baimenu as bai
 from goal import Gmenu as gls
+from goal import Gset as gs
 from chart import Charts  # Import the Charts class from slct_prfl.py
 from create_account import CAmenu  # Import the CAmenu class from create_account.py
 from check_account import Chk  # Import the Chk class from check_account.py
@@ -17,100 +18,109 @@ from check_account import Chk  # Import the Chk class from check_account.py
 ended = 0  # Initialize end to 0 to indicate the program is running
 
 def main(ended):
-    while ended == 0:
-        # Create the main application window
-        root = Tk()  
-        root.title('Random')  # Set the window title
-            
-        def check_account():
-            root.destroy()  # Close the current window
-            new_root = Tk()  # Create a new Tkinter root window
-            Chk(new_root)  # Pass the new root to new function
-            nonlocal ended  # Use the nonlocal keyword to modify the outer variable
-            ended = 1  # Set ended to 1 to indicate the program has ended
+    root = Tk()  # Always create a new Tkinter root window
+    root.title('Main Menu')  # Set the title of the window
 
-        def income_expense():
-            root.destroy()  # Close the current window
-            new_root = Tk()  # Create a new Tkinter root window
-            bai(new_root)  # Pass the new root to new function
-            nonlocal ended  # Use the nonlocal keyword to modify the outer variable
-            ended = 1  # Set ended to 1 to indicate the program has ended
+    # Clear any existing widgets in the root window
+    for widget in root.winfo_children():
+        widget.destroy()
 
-        def crt_accnt():
-            root.destroy()  # Close the current window
-            new_root = Tk()  # Create a new Tkinter root window
-            CAmenu(new_root)  # Pass the new root window to CAmenu
-            nonlocal ended  # Use the nonlocal keyword to modify the outer variable
-            ended = 1  # Set ended to 1 to indicate the program has ended
+    def check_account():
+        root.destroy()  # Close the current window
+        new_root = Tk()  # Create a new Tkinter root window
+        Chk(new_root)  # Pass the new root to new function
+        nonlocal ended
+        ended = 1
 
-        def goals():
-            root.destroy()  # Close the current window
-            new_root = Tk()  # Create a new Tkinter root window
-            gls(new_root)  # Pass the new root to new function
-            nonlocal ended  # Use the nonlocal keyword to modify the outer variable
-            ended = 1  # Set ended to 1 to indicate the program has ended
+    def income_expense():
+        root.destroy()  # Close the current window
+        new_root = Tk()  # Create a new Tkinter root window
+        bai(new_root)  # Pass the new root to new function
+        nonlocal ended
+        ended = 1
 
-        def end_program():
-            root.destroy()  # Close the current window
-            nonlocal ended  # Use the nonlocal keyword to modify the outer variable
-            ended = 1  # Set ended to 1 to indicate the program has ended
+    def crt_accnt():
+        root.destroy()  # Close the current window
+        new_root = Tk()  # Create a new Tkinter root window
+        CAmenu(new_root)  # Pass the new root window to CAmenu
+        nonlocal ended
+        ended = 1
 
-        def chrts():
-            root.destroy()  # Close the current window
-            new_root = Tk()  # Create a new Tkinter root window
-            Charts(new_root)  # Pass the new root to new function
-            nonlocal ended  # Use the nonlocal keyword to modify the outer variable
-            ended = 1  # Set ended to 1 to indicate the program has ended
+    def goals_edit():
+        root.destroy()  # Close the current window
+        new_root = Tk()  # Create a new Tkinter root window
+        gs(new_root)  # Pass the new root to new function
+        nonlocal ended
+        ended = 1
 
-        # Create a main frame inside the window with padding
-        # Padding values: Left (3), Top (3), Right (12), Bottom (12)
-        mainframe = ttk.Frame(root, padding="3 3 12 12")  
-        mainframe.grid(column=0, row=0, sticky=(N, W, E, S))  # Expand in all directions
+    def goals_view():
+        root.destroy()  # Close the current window
+        new_root = Tk()  # Create a new Tkinter root window
+        gls(new_root)  # Pass the new root to new function
+        nonlocal ended
+        ended = 1
 
-        # Configure resizing behavior
-        root.columnconfigure(0, weight=1)  # Allow column expansion
-        root.rowconfigure(0, weight=1)  # Allow row expansion
+    def goals():
+        # Clear all widgets in the root window
+        for widget in root.winfo_children():
+            widget.destroy()
 
-        # Create buttons that print stuff
-        button1 = ttk.Button(mainframe, text='Chart', command=chrts) # Budgeting and income function
-        button1.grid(column=1, row=2, sticky=W)
+        # Create a new frame for the "Goals" section
+        goals_frame = ttk.Frame(root, padding="3 3 12 12")
+        goals_frame.grid(column=0, row=0, sticky=(N, W, E, S))
 
-        button2 = ttk.Button(mainframe, text='Check Account', command=check_account) # Check account function
-        button2.grid(column=1, row=3, sticky=W)
+        # Add the "Check goal" and "Edit goal" buttons
+        ttk.Label(goals_frame, text='Goals').grid(column=3, row=0, sticky=W)
+        ttk.Label(goals_frame, text='').grid(column=1, row=0, sticky=W, columnspan=2)
+        ttk.Label(goals_frame, text='').grid(column=1, row=1, sticky=W, columnspan=2)
+        ttk.Button(goals_frame, text='Check goal', command=goals_view).grid(column=3, row=1, sticky=W)
+        ttk.Button(goals_frame, text='Edit goal', command=goals_edit).grid(column=4, row=1, sticky=W)
 
-        button3 = ttk.Button(mainframe, text='Income Expense Tracking', command=income_expense) # Income and expense tracking function
-        button3.grid(column=2, row=2, sticky=W)
-
-        button4 = ttk.Button(mainframe, text='Create an Account', command=crt_accnt) # Creating an account function
-        button4.grid(column=2, row=3, sticky=W)
-
-        button5 = ttk.Button(mainframe, text='Goals', command=goals) # Goals function
-        button5.grid(column=3, row=2, sticky=W)
-
-        button6 = ttk.Button(mainframe, text='Close', command=end_program) # Ends program
-        button6.grid(column=2, row=8, sticky=N)
-
-        # Create label for user instructions
-        ttk.Label(mainframe, text='Please choose a function:').grid(column=2, row=1, sticky=W)
-
-        # Create labels to display things
-        ttk.Label(mainframe, textvariable="").grid(column=2, row=4, sticky=E)
-        ttk.Label(mainframe, textvariable="").grid(column=2, row=5, sticky=E)
-        ttk.Label(mainframe, textvariable="").grid(column=2, row=3, sticky=E)
-
-        # Add padding to all child widgets inside 'mainframe' for better spacing
-        for child in mainframe.winfo_children():  
+        # Add padding to all child widgets inside 'goals_frame'
+        for child in goals_frame.winfo_children():
             child.grid_configure(padx=5, pady=5)
 
-        # Set the default window size (300x300 pixels)
-        root.geometry('450x300')  
+    def end_program():
+        root.destroy()  # Close the current window
+        nonlocal ended
+        ended = 1
 
-        # Allow the window to be resized in both width and height
-        #root.resizable(True, True)  
+    def chrts():
+        root.destroy()  # Close the current window
+        new_root = Tk()  # Create a new Tkinter root window
+        Charts(new_root)  # Pass the new root to new function
+        nonlocal ended
+        ended = 1
 
-        # Start the Tkinter event loop (keeps the window open and responsive)
-        root.mainloop()
-    return ended  # Return the end variable to indicate the program has ended
+    # Create a main frame inside the window with padding
+    mainframe = ttk.Frame(root, padding="3 3 12 12")
+    mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
+
+    # Configure resizing behavior
+    root.columnconfigure(0, weight=1)
+    root.rowconfigure(0, weight=1)
+
+    # Create buttons for the main menu
+    ttk.Button(mainframe, text='Chart', command=chrts).grid(column=1, row=2, sticky=W)
+    ttk.Button(mainframe, text='Check Account', command=check_account).grid(column=1, row=3, sticky=W)
+    ttk.Button(mainframe, text='Income Expense Tracking', command=income_expense).grid(column=2, row=2, sticky=W)
+    ttk.Button(mainframe, text='Create an Account', command=crt_accnt).grid(column=2, row=3, sticky=W)
+    ttk.Button(mainframe, text='Goals', command=goals).grid(column=3, row=2, sticky=W)
+    ttk.Button(mainframe, text='Close', command=end_program).grid(column=2, row=8, sticky=N)
+
+    # Add a label for user instructions
+    ttk.Label(mainframe, text='Please choose a function:').grid(column=2, row=1, sticky=W)
+
+    # Add padding to all child widgets inside 'mainframe'
+    for child in mainframe.winfo_children():
+        child.grid_configure(padx=5, pady=5)
+
+    # Set the default window size
+    root.geometry('450x300')
+
+    # Start the Tkinter event loop
+    root.mainloop()
+    return ended
 
 if __name__ == "__main__":
     while ended == 0:

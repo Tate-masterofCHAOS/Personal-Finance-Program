@@ -2,19 +2,33 @@ import os
 import tkinter as tk
 from slct_prfl import Slct
 
-import pandas as pd
+import csv
 
 class Baimenu:
-    def __init__(self):
+    def __init__(self, root):
 
-        file_path = Slct()
+        file_path = Slct().selected_file
+        print(f"Selected file path: {file_path}")
+
+        # Proceed with using the file path
+        if file_path:
+            with open(file_path, 'r') as file:
+                data = csv.reader(file)
+                print(data)
         # ROWS 3-4
 
-        # Create a new tkinter window to select a CSV file
-        self.root = tk.Tk()
-        self.root.title('Title')
+        self.root = root  # Use the passed root window
+        self.root.title('Income and Expense Tracking')
 
-        tk.Label(self.root, text='Select a CSV File:').pack(pady=5)
+        # Clear any existing widgets in the root window
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+        # Example: Add a label to the existing window
+        tk.Label(self.root, text='Income and Expense Tracking').pack(pady=10)
+
+        # Example: Add a button to go back to the main menu
+        tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).pack(pady=10)
 
         # Create a Listbox to display CSV file names
         income = tk.Listbox(self.root, height=10, width=50)
@@ -27,7 +41,6 @@ class Baimenu:
         #    income.insert(tk.END, item.split('_'))
 
         # Create a button to go back to the main menu
-        tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).pack(pady=10)
 
         # Handle window close event
         self.root.protocol("WM_DELETE_WINDOW", self.restart_main_menu)
