@@ -16,6 +16,8 @@ class Baimenu:
         self.whole = []
         self.starttime = tk.StringVar()
         self.endtime = tk.StringVar()
+        self.txt2 = tk.StringVar()
+        self.txt3 = tk.StringVar()
 
         self.root.title('Income and Expense Tracking')
 
@@ -49,13 +51,32 @@ class Baimenu:
         # Create UI for adding an expense
         tk.Label(self.root, text='Amount of expense:').grid(row=0, column=0, pady=10)
         tk.Entry(self.root, textvariable=self.txt).grid(row=0, column=1, pady=10)
-        tk.Button(self.root, text='Enter information', command=self.submit_expense).grid(row=1, column=1, pady=10)
+        tk.Label(self.root, text='Catagory of expense:').grid(row=1, column=0, pady=10)
+        tk.Entry(self.root, textvariable=self.txt2).grid(row=1, column=1, pady=10)
+        tk.Button(self.root, text='Enter information', command=self.submit_expense).grid(row=2, column=1, pady=10)
+
+        # Create the Listbox widget
+        tk.Label(self.root, text='Previous sources of expenses:').grid(row=0, column=2, pady=10)
+        self.listbox = tk.Listbox(self.root, height=10, width=20)
+        self.listbox.grid(row=1, column=2, rowspan=2, pady=10)
+
+        # Populate the Listbox with items
+        items = self.whole[1]  # Assuming self.whole[1] contains the list of items
+        for item in items:
+            try:
+                parts = item.split('_')  # Split the item into parts
+                if len(parts) > 1:
+                    self.listbox.insert(tk.END, parts[1])  # Insert the second part (e.g., "food")
+                else:
+                    self.listbox.insert(tk.END, item)  # Insert the whole item if no underscore
+            except Exception as e:
+                print(f"Error processing item '{item}': {e}")  # Debugging: Print any errors
 
     def submit_expense(self):
         """Submit the expense and save it to the file."""
         try:
             # Format the expense with the current date
-            self.format = f"{datetime.now().strftime('%Y-%m-%d')}_{self.txt.get()}"
+            self.format = f"{datetime.now().strftime('%Y-%m-%d')}_{self.txt.get()}_{self.txt2.get()}"
 
             # Validate the input
             if not self.txt.get().strip() or not self.txt.get().isdigit():
@@ -94,13 +115,15 @@ class Baimenu:
         # Create UI for adding an income
         tk.Label(self.root, text='Amount of income:').grid(row=0, column=0, pady=10)
         tk.Entry(self.root, textvariable=self.txt).grid(row=0, column=1, pady=10)
-        tk.Button(self.root, text='Enter information', command=self.submit_income).grid(row=1, column=1, pady=10)
+        tk.Label(self.root, text='Source of income:').grid(row=1, column=0, pady=10)
+        tk.Entry(self.root, textvariable=self.txt2).grid(row=1, column=1, pady=10)
+        tk.Button(self.root, text='Enter information', command=self.submit_income).grid(row=2, column=1, pady=10)
 
     def submit_income(self):
         """Submit the income and save it to the file."""
         try:
             # Format the income with the current date
-            self.format = f"{datetime.now().strftime('%Y-%m-%d')}_{self.txt.get()}"
+            self.format = f"{datetime.now().strftime('%Y-%m-%d')}_{self.txt.get()}_{self.txt2.get()}"
 
             # Validate the input
             if not self.txt.get().strip() or not self.txt.get().isdigit():

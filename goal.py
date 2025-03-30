@@ -11,6 +11,7 @@ class Gmenu:
         self.root = root
         self.file_path = file_path
         self.txt = tk.StringVar()
+        self.txt2 = tk.StringVar()
         self.data_rows = []
 
         self.root.title('Goals')
@@ -25,6 +26,10 @@ class Gmenu:
         tk.Label(self.root, text='Goals').pack(pady=10)
         tk.Label(self.root, text='Goal amount:').pack(pady=3)
         tk.Label(self.root, textvariable=self.txt, font=("Helvetica", 12, "bold")).pack(pady=3)
+        tk.Label(self.root, text='Total amount/goal:').pack(pady=3)
+        tk.Label(self.root, text='(Percentage of the goal amount that total is)').pack(pady=3)
+        tk.Label(self.root, textvariable=self.txt2, font=("Helvetica", 12, "bold")).pack(pady=3)
+        
         tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).pack(pady=20)
 
         # Display the goal amount
@@ -37,6 +42,8 @@ class Gmenu:
         """Display the goal amount from the data."""
         if self.data_rows:
             self.txt.set(self.data_rows[0][2])  # Set the text variable to the goal amount
+            self.txt2.set((round(float(self.data_rows[0][0])/float(self.data_rows[0][2])))*10)  # Set the text variable to the total amount/goal
+            self.txt2.set(self.txt2.get() + '%')  # Append '%' to the total amount/goal
 
     def restart_main_menu(self):
         """Return to the main menu."""

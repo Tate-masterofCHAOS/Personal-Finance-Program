@@ -3,14 +3,16 @@
 import os
 import tkinter as tk
 from tkinter import ttk
+
 from income_and_expense import Baimenu as bai
-from goal import Gmenu as gls
-from goal import Gset as gs
+from goal import Gmenu as gls, Gset as gs
 from chart import Charts
 from create_account import CAmenu
 from check_account import Chk
 from slct_prfl import Slct
 from change_currency import Cc
+from budgetting import Budge, Budge_shw
+
 
 # Global variable to track program state
 ended = 0  # Initialize to 0 to indicate the program is running
@@ -209,6 +211,73 @@ def main():
         new_root = tk.Tk()
         Cc(new_root, file_path)  # Pass the file_path to the Charts class
         ended = 1
+    
+    def budgt_shw():
+        global ended  # Declare 'ended' as a global variable
+        root.destroy()  # Close the current window
+
+        def return_to_menu():
+            main()  # Restart the main menu
+
+        profile_window = tk.Tk()  # Create a new Tkinter root window for profile selection
+        profile_selector = Slct(profile_window, return_to_menu)  # Pass the callback to the Slct class
+        profile_window.wait_window()  # Wait until the profile selection window is closed
+
+        # Retrieve the selected file path
+        file_path = profile_selector.get_selected_file()
+        if not file_path:
+            tk.messagebox.showerror("Error", "No file selected. Returning to the main menu.")
+            main()  # Restart the main menu if no file is selected
+            return
+
+        # After the profile selection window is closed, create the new window
+        new_root = tk.Tk()
+        Budge_shw(new_root, file_path)  # Pass the file_path to the Charts class
+        ended = 1
+
+    def budgt():
+        global ended  # Declare 'ended' as a global variable
+        root.destroy()  # Close the current window
+
+        def return_to_menu():
+            main()  # Restart the main menu
+
+        profile_window = tk.Tk()  # Create a new Tkinter root window for profile selection
+        profile_selector = Slct(profile_window, return_to_menu)  # Pass the callback to the Slct class
+        profile_window.wait_window()  # Wait until the profile selection window is closed
+
+        # Retrieve the selected file path
+        file_path = profile_selector.get_selected_file()
+        if not file_path:
+            tk.messagebox.showerror("Error", "No file selected. Returning to the main menu.")
+            main()  # Restart the main menu if no file is selected
+            return
+
+        # After the profile selection window is closed, create the new window
+        new_root = tk.Tk()
+        Budge(new_root, file_path)  # Pass the file_path to the Charts class
+        ended = 1
+
+    def budgt_menu():
+        # Clear all widgets in the root window
+        for widget in root.winfo_children():
+            widget.destroy()
+
+        # Create a new frame for the "Goals" section
+        goals_frame = ttk.Frame(root, padding="3 3 12 12")
+        goals_frame.grid(column=0, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
+
+        # Add the "Check goal" and "Edit goal" buttons
+        ttk.Button(goals_frame, text='Check budget catagories', command=budgt_shw).grid(column=0, row=1)
+        ttk.Button(goals_frame, text='Edit budget catagories', command=budgt).grid(column=1, row=1)
+
+        ttk.Label(goals_frame, text='Goals').grid(column=0, row=0, columnspan=2, pady = 20, padx=20)
+
+        # Add padding to all child widgets inside 'goals_frame'
+        for child in goals_frame.winfo_children():
+            child.grid_configure(padx=5, pady=5)
+
+    
 
     # Create a main frame inside the window with padding
     mainframe = ttk.Frame(root, padding="3 3 12 12")
@@ -225,6 +294,7 @@ def main():
     ttk.Button(mainframe, text='Create an Account', command=crt_accnt).grid(column=2, row=3)
     ttk.Button(mainframe, text='Goals', command=goals).grid(column=3, row=2)
     ttk.Button(mainframe, text='Change currency', command=Chnge_curr).grid(column=3, row=3)
+    ttk.Button(mainframe, text='Budgetting', command=budgt_menu).grid(column=1, row=4)
     ttk.Button(mainframe, text='Close', command=end_program).grid(column=2, row=8)
 
     # Add a label for user instructions
