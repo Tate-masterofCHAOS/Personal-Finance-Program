@@ -1,50 +1,65 @@
 import os
 import tkinter as tk
-from create_account import CAmenu
+from tkinter import messagebox
+
 
 class Slct:
-    def __init__(self):
-        # Get the directory of the current script
-        current_dir = os.path.dirname(__file__)
+    def __init__(self, root, return_to_menu_callback):
+        self.root = root
+        self.selected_file = None  # Initialize the selected file path
+        self.return_to_menu_callback = return_to_menu_callback  # Callback to return to the main menu
 
-        # List all CSV files in the current directory
-        csv_files = [f for f in os.listdir(current_dir) if f.endswith('.csv')]
+        # Add UI elements for file selection
+        tk.Label(self.root, text="Select a profile from the list:").pack(pady=10)
 
-        # Create a new tkinter window to select a CSV file
-        self.root = tk.Tk()
-        self.root.title('Select CSV File for Pie Chart')
+        # Create a listbox to display available files
+        self.file_listbox = tk.Listbox(self.root, width=50, height=15)
+        self.file_listbox.pack(pady=10)
 
-        tk.Label(self.root, text='Select a CSV File:').pack(pady=5)
+        # Populate the listbox with CSV files from the current directory
+        self.populate_file_list()
 
-        # Create a Listbox to display CSV file names
-        csv_listbox = tk.Listbox(self.root, height=10, width=50)
-        csv_listbox.pack(pady=5)
-
-        # Populate the Listbox with CSV file names
-        for csv_file in csv_files:
-            csv_listbox.insert(tk.END, csv_file)
-
-        def give_flepth():
-            # Get the selected file name
-            selected_file_name = csv_listbox.get(csv_listbox.curselection())
-            # Construct the full file path
-            self.selected_file = os.path.join(current_dir, selected_file_name)
-            self.root.quit()  # Exit the mainloop instead of destroying the window
-
-        # Create a button to select the currently selected CSV file
-        tk.Button(self.root, text='Select CSV File', command=give_flepth).pack(pady=10)
-        tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).pack(pady=10)
-        tk.Button(self.root, text='Create new account', command=self.restart_main_menu).pack(pady=10)
+        # Add buttons for selecting a file and returning to the menu
+        tk.Button(self.root, text="Select File", command=self.choose_file).pack(pady=5)
+        tk.Button(self.root, text="Return to Menu", command=self.return_to_menu).pack(pady=5)
 
         # Handle window close event
-        self.root.protocol("WM_DELETE_WINDOW", lambda: self.root.destroy())
-        self.selected_file = None
+        self.root.protocol("WM_DELETE_WINDOW", self.close_window)
 
-        self.root.mainloop()
-        self.root.destroy()  # Destroy the window after mainloop ends
+    def populate_file_list(self):
+        """Populate the listbox with CSV files from the current directory."""
+        current_dir = os.getcwd()  # Get the current working directory
+        csv_files = [f for f in os.listdir(current_dir) if f.endswith('.csv')]  # Filter for CSV files
 
-    def restart_main_menu(self):
+        if not csv_files:
+            self.file_listbox.insert(tk.END, "No CSV files found.")  # Show a message if no files are found
+            self.file_listbox.config(state=tk.DISABLED)  # Disable the listbox if no files are available
+        else:
+            for file in csv_files:
+                self.file_listbox.insert(tk.END, file)  # Add each file to the listbox
+
+    def choose_file(self):
+        """Set the selected file from the listbox."""
+        try:
+            selected_index = self.file_listbox.curselection()  # Get the selected index
+            if not selected_index:
+                raise ValueError("No file selected.")  # Raise an error if no file is selected
+
+            selected_file = self.file_listbox.get(selected_index)  # Get the selected file name
+            self.selected_file = os.path.abspath(selected_file)  # Get the absolute path of the selected file
+            self.root.destroy()  # Close the window after selecting a file
+        except ValueError as e:
+            messagebox.showerror("Error", str(e))  # Show an error message if no file is selected
+
+    def return_to_menu(self):
         """Return to the main menu."""
-        self.root.destroy()  # Close the current game window
-        from main import main  # Import the main menu function
-        main(0)  # Restart the main menu
+        self.root.destroy()  # Close the current window
+        self.return_to_menu_callback()  # Call the callback to return to the main menu
+
+    def close_window(self):
+        """Handle the window close event."""
+        self.root.destroy()
+
+    def get_selected_file(self):
+        """Return the selected file path."""
+        return self.selected_file
