@@ -10,6 +10,7 @@ from chart import Charts
 from create_account import CAmenu
 from check_account import Chk
 from slct_prfl import Slct
+from change_currency import Cc
 
 # Global variable to track program state
 ended = 0  # Initialize to 0 to indicate the program is running
@@ -186,6 +187,29 @@ def main():
         Charts(new_root, file_path)  # Pass the file_path to the Charts class
         ended = 1
 
+    def Chnge_curr():
+        global ended  # Declare 'ended' as a global variable
+        root.destroy()  # Close the current window
+
+        def return_to_menu():
+            main()  # Restart the main menu
+
+        profile_window = tk.Tk()  # Create a new Tkinter root window for profile selection
+        profile_selector = Slct(profile_window, return_to_menu)  # Pass the callback to the Slct class
+        profile_window.wait_window()  # Wait until the profile selection window is closed
+
+        # Retrieve the selected file path
+        file_path = profile_selector.get_selected_file()
+        if not file_path:
+            tk.messagebox.showerror("Error", "No file selected. Returning to the main menu.")
+            main()  # Restart the main menu if no file is selected
+            return
+
+        # After the profile selection window is closed, create the new window
+        new_root = tk.Tk()
+        Cc(new_root, file_path)  # Pass the file_path to the Charts class
+        ended = 1
+
     # Create a main frame inside the window with padding
     mainframe = ttk.Frame(root, padding="3 3 12 12")
     mainframe.grid(column=0, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
@@ -200,6 +224,7 @@ def main():
     ttk.Button(mainframe, text='Income Expense Tracking', command=income_expense).grid(column=2, row=2)
     ttk.Button(mainframe, text='Create an Account', command=crt_accnt).grid(column=2, row=3)
     ttk.Button(mainframe, text='Goals', command=goals).grid(column=3, row=2)
+    ttk.Button(mainframe, text='Change currency', command=Chnge_curr).grid(column=3, row=3)
     ttk.Button(mainframe, text='Close', command=end_program).grid(column=2, row=8)
 
     # Add a label for user instructions
