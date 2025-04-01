@@ -19,7 +19,7 @@ class Baimenu:
         self.endtime = tk.StringVar()
         self.txt2 = tk.StringVar()
         self.txt3 = tk.StringVar()
-        self.is_destroyed = False
+        self.is_valid = True
 
         self.root.title('Income and Expense Tracking')
 
@@ -33,18 +33,17 @@ class Baimenu:
                 self.income.append(self.whole[2])
                 self.expenses.append(self.whole[3])
         except:
-            tk.messagebox.showerror("Error", "No valid expenses and or income")
-            self.restart_main_menu()
+            self.is_valid = False
 
-        if self.root.winfo_exists():
-            # Add UI elements
-            tk.Label(self.root, text='Income and Expense Tracking').grid(row=0, column=0, columnspan=2, pady=10, padx=10)
-            tk.Button(self.root, text='Add expenses', command=self.add_expenses).grid(row=1, column=0, pady=10, padx=10)
-            tk.Button(self.root, text='Add income', command=self.add_income).grid(row=1, column=1, pady=10, padx=10)
+        # Add UI elements
+        tk.Label(self.root, text='Income and Expense Tracking').grid(row=0, column=0, columnspan=2, pady=10, padx=10)
+        tk.Button(self.root, text='Add expenses', command=self.add_expenses).grid(row=1, column=0, pady=10, padx=10)
+        tk.Button(self.root, text='Add income', command=self.add_income).grid(row=1, column=1, pady=10, padx=10)
+        tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).grid(row=3, column=0, columnspan=2, pady=20, padx=10)
 
+        if self.is_valid == True:
             tk.Button(self.root, text='Income in timeframe', command=self.time_income).grid(row=2, column=0, pady=10, padx=10)
             tk.Button(self.root, text='Expenses in timeframe', command=self.time_expenses).grid(row=2, column=1, pady=10, padx=10)
-            tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).grid(row=3, column=0, columnspan=2, pady=20, padx=10)
 
         # Handle window close event
         self.root.protocol("WM_DELETE_WINDOW", self.restart_main_menu)
@@ -61,6 +60,7 @@ class Baimenu:
         tk.Label(self.root, text='Catagory of expense:').grid(row=1, column=0, pady=10)
         tk.Entry(self.root, textvariable=self.txt2).grid(row=1, column=1, pady=10)
         tk.Button(self.root, text='Enter information', command=self.submit_expense).grid(row=2, column=1, pady=10)
+        tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).grid(row=2, column=0, pady=20, padx=10)
 
         # Create the Listbox widget
         tk.Label(self.root, text='Previous sources of expenses:').grid(row=0, column=2, pady=10)
@@ -125,6 +125,7 @@ class Baimenu:
         tk.Label(self.root, text='Source of income:').grid(row=1, column=0, pady=10)
         tk.Entry(self.root, textvariable=self.txt2).grid(row=1, column=1, pady=10)
         tk.Button(self.root, text='Enter information', command=self.submit_income).grid(row=2, column=1, pady=10)
+        tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).grid(row=2, column=0, pady=20, padx=10)
 
     def submit_income(self):
         """Submit the income and save it to the file."""
