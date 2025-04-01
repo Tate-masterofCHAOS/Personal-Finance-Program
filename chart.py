@@ -42,7 +42,6 @@ class Charts:
         # Construct the full file path
         file_path = os.path.join(os.path.dirname(__file__), selected_file_name)
 
-        input()
 
         with open(file_path, 'r') as file:
             lines = file.readlines()
