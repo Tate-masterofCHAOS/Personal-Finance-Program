@@ -1,10 +1,4 @@
 Total amount, Type of currency, Goal amount, Date last accessed
 SOME AMOUNT OF expenses
-01-01-2001_900, 02-01-2001_230, ect
-Dates of expense_How much expense
-
-
 Dates of income_How much income
-
-for item in row:
-    item.split('_')
+Dates of expense_How much expense

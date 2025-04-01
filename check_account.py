@@ -1,31 +1,34 @@
 import os
 import tkinter as tk
-from slct_prfl import Slct  # Import the Charts class from slct_prfl.py
-
-import pandas as pd
+import csv
 
 class Chk:
-    def __init__(self):
+    def __init__(self, root, file_path):
+        self.root = root
+        self.file_path = file_path
+        self.total = tk.StringVar()
+        self.whole = []
 
-        file_path = Slct()
-        # ROW 1 ITEM 1 IN A LIST ONLY, COLUMN 2
+        self.root.title('Check Account')
 
-        # Create a new tkinter window to select a CSV file
-        self.root = tk.Tk()
-        self.root.title('Title')
+        # Proceed with using the file path
+        if self.file_path:
+            with open(self.file_path, 'r') as file:
+                data = csv.reader(file)
+                for row in data:
+                    self.whole.append(row)
+            self.total.set(f'{self.whole[0][0]}  -  {self.whole[0][1]}')
 
-        #txt = CSV file row 1 col 2
-
-        #tk.Label(self.root, text=txt).pack(pady=5)
-
+        tk.Label(self.root, text='Total amount:').grid(row=0, column=0, columnspan=2, pady=10, padx=10)
+        tk.Label(self.root, textvariable=self.total, font=("Helvetica", 12, "bold")).grid(row=2, column=0, columnspan=2, pady=10, padx=10)
         # Create a button to go back to the main menu
-        tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).pack(pady=10)
+        tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).grid(row=3, column=0, columnspan=2, pady=20, padx=10)
 
         # Handle window close event
         self.root.protocol("WM_DELETE_WINDOW", self.restart_main_menu)
-    
+
     def restart_main_menu(self):
         """Return to the main menu."""
         self.root.destroy()  # Close the current game window
         from main import main  # Import the main menu function
-        main(0)  # Restart the main menu
+        main()  # Restart the main menu
