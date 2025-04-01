@@ -155,3 +155,8 @@ DEFINE Income and expense tracking
     IF EXIT CLICKED
         RETURN to main menu
 Vincent's pseudocode:
+    Provide a tkinter window for menu choices, if they click a button, it should send them to that respective function.
+    Once inside the function, there should be a menu for the function that displays everything. 
+    Some functions use a user selection, I need to have a list of all the users and if they are selected, it needs to return the information.
+    Every menu should have scroll, and if it's showing data, it should replace whatever is already there
+    Use tkinter to make a window to show the information in charts.

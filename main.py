@@ -1,100 +1,314 @@
-#This is the menu, DON'T TOUCH IT! MY FILE!
-#Vincent's code
+# This is the menu, DON'T TOUCH IT! MY FILE!
+# Vincent's code
+import os
+import tkinter as tk
+from tkinter import ttk
 
-from tkinter import *  # Import all Tkinter functions
-from tkinter import ttk  # Import themed Tkinter widgets
+from income_and_expense import Baimenu as bai
+from goal import Gmenu as gls, Gset as gs
+from chart import Charts
+from create_account import CAmenu
+from check_account import Chk
+from slct_prfl import Slct
+from change_currency import Cc
+from budgetting import Budge, Budge_shw
 
-from test import durg
-from budgeting_and_income import budget_nd_income as cam
-from income_and_expense import menu as bai
-from create_account import create
-from goal import goals as gls
 
-# Makes a variable to end the code
-ended = 0  # Initialize end to 0 to indicate the program is running
+# Global variable to track program state
+ended = 0  # Initialize to 0 to indicate the program is running
 
-def main(ended):
-    while ended == 0:
-        # Create the main application window
-        root = Tk()  
-        root.title('Random')  # Set the window title
 
-        # Functions that set the variables
-        def budgeting_income():
-            root.destroy()  # Close the current window
-            Toplevel(durg())  # Create a new top-level window for the 'durg' function
-            
-        def check_account():
-            root.destroy()  # Close the current window
-            Toplevel(cam())  # Create a new top-level window for the 'menu' function
+def main():
+    global ended  # Declare 'ended' as a global variable
+    root = tk.Tk()  # Create the main Tkinter root window
+    root.title('Main Menu')  # Set the title of the window
 
-        def income_expense():
-            root.destroy()  # Close the current window
-            Toplevel(bai())  # Create a new top-level window for the 'bai' function
+    # Clear any existing widgets in the root window
+    for widget in root.winfo_children():
+        widget.destroy()
 
-        def crt_accnt():
-            root.destroy()  # Close the current window
-            Toplevel(create())  # Create a new top-level window for the 'create' function
+    def check_account():
+        global ended  # Declare 'ended' as a global variable
+        root.destroy()  # Close the current window
 
-        def goals():
-            root.destroy()  # Close the current window
-            Toplevel(gls())  # Create a new top-level window for the 'create' function
+        def return_to_menu():
+            main()  # Restart the main menu
 
-        def end_program():
-            nonlocal ended  # Use the nonlocal keyword to modify the outer variable
-            ended = 1  # Set ended to 1 to indicate the program has ended
-            root.destroy()  # Close the current window
+        profile_window = tk.Tk()  # Create a new Tkinter root window for profile selection
+        profile_selector = Slct(profile_window, return_to_menu)  # Pass the callback to the Slct class
+        profile_window.wait_window()  # Wait until the profile selection window is closed
 
-        # Create a main frame inside the window with padding
-        # Padding values: Left (3), Top (3), Right (12), Bottom (12)
-        mainframe = ttk.Frame(root, padding="3 3 12 12")  
-        mainframe.grid(column=0, row=0, sticky=(N, W, E, S))  # Expand in all directions
+        # Retrieve the selected file path
+        file_path = profile_selector.get_selected_file()
+        if not file_path:
+            tk.messagebox.showerror("Error", "No file selected. Returning to the main menu.")
+            main()  # Restart the main menu if no file is selected
+            return
 
-        # Configure resizing behavior
-        root.columnconfigure(0, weight=1)  # Allow column expansion
-        root.rowconfigure(0, weight=1)  # Allow row expansion
+        # After the profile selection window is closed, create the new window
+        new_root = tk.Tk()
+        Chk(new_root, file_path)  # Pass the file_path to the Chk class
+        ended = 1
 
-        # Create buttons that print stuff
-        button1 = ttk.Button(mainframe, text='Budgetting and Income', command=budgeting_income) # Budgeting and income function
-        button1.grid(column=1, row=2, sticky=W)
+    def income_expense():
+        global ended  # Declare 'ended' as a global variable
+        root.destroy()  # Close the current window
 
-        button2 = ttk.Button(mainframe, text='Check Account', command=check_account) # Check account function
-        button2.grid(column=1, row=3, sticky=W)
+        def return_to_menu():
+            main()  # Restart the main menu
 
-        button3 = ttk.Button(mainframe, text='Income Expense Tracking', command=income_expense) # Income and expense tracking function
-        button3.grid(column=2, row=2, sticky=W)
+        profile_window = tk.Tk()  # Create a new Tkinter root window for profile selection
+        profile_selector = Slct(profile_window, return_to_menu)  # Pass the callback to the Slct class
+        profile_window.wait_window()  # Wait until the profile selection window is closed
 
-        button4 = ttk.Button(mainframe, text='Create an Account', command=crt_accnt) # Creating an account function
-        button4.grid(column=2, row=3, sticky=W)
+        # Retrieve the selected file path
+        file_path = profile_selector.get_selected_file()
+        if not file_path:
+            tk.messagebox.showerror("Error", "No file selected. Returning to the main menu.")
+            main()  # Restart the main menu if no file is selected
+            return
 
-        button5 = ttk.Button(mainframe, text='Goals', command=goals) # Goals function
-        button5.grid(column=3, row=2, sticky=W)
+        # After the profile selection window is closed, create the new window
+        new_root = tk.Tk()
+        bai(new_root, file_path)  # Pass the file_path to the Baimenu class
+        ended = 1
 
-        button6 = ttk.Button(mainframe, text='Close', command=end_program) # Ends program
-        button6.grid(column=2, row=8, sticky=N)
+    def crt_accnt():
+        global ended  # Declare 'ended' as a global variable
+        root.destroy()  # Close the current window
 
-        # Create label for user instructions
-        ttk.Label(mainframe, text='Please choose a function:').grid(column=2, row=1, sticky=W)
+        def return_to_menu():
+            main()  # Restart the main menu
 
-        # Create labels to display things
-        ttk.Label(mainframe, textvariable="").grid(column=2, row=4, sticky=E)
-        ttk.Label(mainframe, textvariable="").grid(column=2, row=5, sticky=E)
-        ttk.Label(mainframe, textvariable="").grid(column=2, row=3, sticky=E)
+        profile_window = tk.Tk()  # Create a new Tkinter root window for profile selection
+        profile_selector = Slct(profile_window, return_to_menu)  # Pass the callback to the Slct class
+        profile_window.wait_window()  # Wait until the profile selection window is closed
 
-        # Add padding to all child widgets inside 'mainframe' for better spacing
-        for child in mainframe.winfo_children():  
+        # Retrieve the selected file path
+        file_path = profile_selector.get_selected_file()
+        if not file_path:
+            tk.messagebox.showerror("Error", "No file selected. Returning to the main menu.")
+            main()  # Restart the main menu if no file is selected
+            return
+
+        # After the profile selection window is closed, create the new window
+        new_root = tk.Tk()
+        CAmenu(new_root, file_path)  # Pass the file_path to the CAmenu class
+        ended = 1
+
+    def goals_edit():
+        global ended  # Declare 'ended' as a global variable
+        root.destroy()  # Close the current window
+
+        def return_to_menu():
+            main()  # Restart the main menu
+
+        profile_window = tk.Tk()  # Create a new Tkinter root window for profile selection
+        profile_selector = Slct(profile_window, return_to_menu)  # Pass the callback to the Slct class
+        profile_window.wait_window()  # Wait until the profile selection window is closed
+
+        # Retrieve the selected file path
+        file_path = profile_selector.get_selected_file()
+        if not file_path:
+            tk.messagebox.showerror("Error", "No file selected. Returning to the main menu.")
+            main()  # Restart the main menu if no file is selected
+            return
+
+        # After the profile selection window is closed, create the new window
+        new_root = tk.Tk()
+        gs(new_root, file_path)  # Pass the file_path to the Gset class
+        ended = 1
+
+    def goals_view():
+        global ended  # Declare 'ended' as a global variable
+        root.destroy()  # Close the current window
+
+        def return_to_menu():
+            main()  # Restart the main menu
+
+        profile_window = tk.Tk()  # Create a new Tkinter root window for profile selection
+        profile_selector = Slct(profile_window, return_to_menu)  # Pass the callback to the Slct class
+        profile_window.wait_window()  # Wait until the profile selection window is closed
+
+        # Retrieve the selected file path
+        file_path = profile_selector.get_selected_file()
+        if not file_path:
+            tk.messagebox.showerror("Error", "No file selected. Returning to the main menu.")
+            main()  # Restart the main menu if no file is selected
+            return
+
+        # After the profile selection window is closed, create the new window
+        new_root = tk.Tk()
+        gls(new_root, file_path)  # Pass the file_path to the Gset class
+        ended = 1
+
+    def goals():
+        # Clear all widgets in the root window
+        for widget in root.winfo_children():
+            widget.destroy()
+
+        # Create a new frame for the "Goals" section
+        goals_frame = ttk.Frame(root, padding="3 3 12 12")
+        goals_frame.grid(column=0, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
+
+        # Add the "Check goal" and "Edit goal" buttons
+        ttk.Button(goals_frame, text='Check goal', command=goals_view).grid(column=0, row=1)
+        ttk.Button(goals_frame, text='Edit goal', command=goals_edit).grid(column=1, row=1)
+
+        ttk.Label(goals_frame, text='Goals').grid(column=0, row=0, columnspan=2, pady = 20, padx=20)
+
+        # Add padding to all child widgets inside 'goals_frame'
+        for child in goals_frame.winfo_children():
             child.grid_configure(padx=5, pady=5)
 
-        # Set the default window size (300x300 pixels)
-        root.geometry('450x300')  
+    def end_program():
+        global ended  # Declare 'ended' as a global variable
+        root.destroy()  # Close the current window
+        ended = 1
 
-        # Allow the window to be resized in both width and height
-        #root.resizable(True, True)  
+    def chrts():
+        global ended  # Declare 'ended' as a global variable
+        root.destroy()  # Close the current window
 
-        # Start the Tkinter event loop (keeps the window open and responsive)
-        root.mainloop()
-    return ended  # Return the end variable to indicate the program has ended
+        def return_to_menu():
+            main()  # Restart the main menu
+
+        profile_window = tk.Tk()  # Create a new Tkinter root window for profile selection
+        profile_selector = Slct(profile_window, return_to_menu)  # Pass the callback to the Slct class
+        profile_window.wait_window()  # Wait until the profile selection window is closed
+
+        # Retrieve the selected file path
+        file_path = profile_selector.get_selected_file()
+        if not file_path:
+            tk.messagebox.showerror("Error", "No file selected. Returning to the main menu.")
+            main()  # Restart the main menu if no file is selected
+            return
+
+        # After the profile selection window is closed, create the new window
+        new_root = tk.Tk()
+        Charts(new_root, file_path)  # Pass the file_path to the Charts class
+        ended = 1
+
+    def Chnge_curr():
+        global ended  # Declare 'ended' as a global variable
+        root.destroy()  # Close the current window
+
+        def return_to_menu():
+            main()  # Restart the main menu
+
+        profile_window = tk.Tk()  # Create a new Tkinter root window for profile selection
+        profile_selector = Slct(profile_window, return_to_menu)  # Pass the callback to the Slct class
+        profile_window.wait_window()  # Wait until the profile selection window is closed
+
+        # Retrieve the selected file path
+        file_path = profile_selector.get_selected_file()
+        if not file_path:
+            tk.messagebox.showerror("Error", "No file selected. Returning to the main menu.")
+            main()  # Restart the main menu if no file is selected
+            return
+
+        # After the profile selection window is closed, create the new window
+        new_root = tk.Tk()
+        Cc(new_root, file_path)  # Pass the file_path to the Charts class
+        ended = 1
+    
+    def budgt_shw():
+        global ended  # Declare 'ended' as a global variable
+        root.destroy()  # Close the current window
+
+        def return_to_menu():
+            main()  # Restart the main menu
+
+        profile_window = tk.Tk()  # Create a new Tkinter root window for profile selection
+        profile_selector = Slct(profile_window, return_to_menu)  # Pass the callback to the Slct class
+        profile_window.wait_window()  # Wait until the profile selection window is closed
+
+        # Retrieve the selected file path
+        file_path = profile_selector.get_selected_file()
+        if not file_path:
+            tk.messagebox.showerror("Error", "No file selected. Returning to the main menu.")
+            main()  # Restart the main menu if no file is selected
+            return
+
+        # After the profile selection window is closed, create the new window
+        new_root = tk.Tk()
+        Budge_shw(new_root, file_path)  # Pass the file_path to the Charts class
+        ended = 1
+
+    def budgt():
+        global ended  # Declare 'ended' as a global variable
+        root.destroy()  # Close the current window
+
+        def return_to_menu():
+            main()  # Restart the main menu
+
+        profile_window = tk.Tk()  # Create a new Tkinter root window for profile selection
+        profile_selector = Slct(profile_window, return_to_menu)  # Pass the callback to the Slct class
+        profile_window.wait_window()  # Wait until the profile selection window is closed
+
+        # Retrieve the selected file path
+        file_path = profile_selector.get_selected_file()
+        if not file_path:
+            tk.messagebox.showerror("Error", "No file selected. Returning to the main menu.")
+            main()  # Restart the main menu if no file is selected
+            return
+
+        # After the profile selection window is closed, create the new window
+        new_root = tk.Tk()
+        Budge(new_root, file_path)  # Pass the file_path to the Charts class
+        ended = 1
+
+    def budgt_menu():
+        # Clear all widgets in the root window
+        for widget in root.winfo_children():
+            widget.destroy()
+
+        # Create a new frame for the "Goals" section
+        goals_frame = ttk.Frame(root, padding="3 3 12 12")
+        goals_frame.grid(column=0, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
+
+        # Add the "Check goal" and "Edit goal" buttons
+        ttk.Button(goals_frame, text='Check budget catagories', command=budgt_shw).grid(column=0, row=1)
+        ttk.Button(goals_frame, text='Edit budget catagories', command=budgt).grid(column=1, row=1)
+
+        ttk.Label(goals_frame, text='Goals').grid(column=0, row=0, columnspan=2, pady = 20, padx=20)
+
+        # Add padding to all child widgets inside 'goals_frame'
+        for child in goals_frame.winfo_children():
+            child.grid_configure(padx=5, pady=5)
+
+    
+
+    # Create a main frame inside the window with padding
+    mainframe = ttk.Frame(root, padding="3 3 12 12")
+    mainframe.grid(column=0, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
+
+    # Configure resizing behavior
+    root.columnconfigure(0, weight=1)
+    root.rowconfigure(0, weight=1)
+
+    # Create buttons for the main menu
+    ttk.Button(mainframe, text='Chart', command=chrts).grid(column=1, row=2)
+    ttk.Button(mainframe, text='Check Account Total', command=check_account).grid(column=1, row=3)
+    ttk.Button(mainframe, text='Income Expense Tracking', command=income_expense).grid(column=2, row=2)
+    ttk.Button(mainframe, text='Create an Account', command=crt_accnt).grid(column=2, row=3)
+    ttk.Button(mainframe, text='Goals', command=goals).grid(column=3, row=2)
+    ttk.Button(mainframe, text='Change currency', command=Chnge_curr).grid(column=3, row=3)
+    ttk.Button(mainframe, text='Budgetting', command=budgt_menu).grid(column=1, row=4)
+    ttk.Button(mainframe, text='Close', command=end_program).grid(column=2, row=8)
+
+    # Add a label for user instructions
+    ttk.Label(mainframe, text='Please choose a function:').grid(column=2, row=1)
+
+    # Add padding to all child widgets inside 'mainframe'
+    for child in mainframe.winfo_children():
+        child.grid_configure(padx=10, pady=10)
+
+    # Start the Tkinter event loop
+    root.mainloop()
+    return ended
+
 
 if __name__ == "__main__":
     while ended == 0:
-        ended = main(ended)  # Call the main function to run the application
+        ended = main()  # Call the main function to run the application

@@ -1,59 +1,113 @@
 import os
+import tkinter as tk
+from tkinter import messagebox
+from tkinter import ttk
+from slct_prfl import Slct
+import csv
+import pandas as pd
 
-from tkinter import *  # Import all Tkinter functions
-from tkinter import ttk  # Import themed Tkinter widgets
+class Gmenu:
+    def __init__(self, root, file_path):
+        self.root = root
+        self.file_path = file_path
+        self.txt = tk.StringVar()
+        self.txt2 = tk.StringVar()
+        self.data_rows = []
 
-def goals():
-    # Create the main application window
-    root = Tk()  
-    root.title('Random')  # Set the window title
+        self.root.title('Goals')
 
-    # Make variables that can change and show things through .set()
-    print1 = StringVar()
-    print2 = StringVar()
+        # Proceed with using the file path
+        if self.file_path:
+            with open(self.file_path, 'r') as file:
+                reader = csv.reader(file)
+                self.data_rows = [row for row in reader]
 
-    # Functions that set the variables
-    def printer1():
-        print1.set('Durg!')
+        # Add UI elements
+        tk.Label(self.root, text='Goals').pack(pady=10)
+        tk.Label(self.root, text='Goal amount:').pack(pady=3)
+        tk.Label(self.root, textvariable=self.txt, font=("Helvetica", 12, "bold")).pack(pady=3)
+        tk.Label(self.root, text='Total amount/goal:').pack(pady=3)
+        tk.Label(self.root, text='(Percentage of the goal amount that total is)').pack(pady=3)
+        tk.Label(self.root, textvariable=self.txt2, font=("Helvetica", 12, "bold")).pack(pady=3)
         
-    def printer2():
-        print2.set('Blurg!')
+        tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).pack(pady=20)
 
-    def printer3():
-        root.destroy()  # Close the current window
-        main_file_path = os.path.join(os.path.dirname(__file__), 'main.py')
-        Toplevel(os.system(f'python "{main_file_path}"'))
+        # Display the goal amount
+        self.display()
 
-    # Create a main frame inside the window with padding
-    # Padding values: Left (3), Top (3), Right (12), Bottom (12)
-    mainframe = ttk.Frame(root, padding="3 3 12 12")  
-    mainframe.grid(column=0, row=0, sticky=(N, W, E, S))  # Expand in all directions
+        # Handle window close event
+        self.root.protocol("WM_DELETE_WINDOW", self.restart_main_menu)
 
-    # Configure resizing behavior
-    root.columnconfigure(0, weight=1)  # Allow column expansion
-    root.rowconfigure(0, weight=1)  # Allow row expansion
+    def display(self):
+        """Display the goal amount from the data."""
+        if self.data_rows:
+            self.txt.set(self.data_rows[0][2])  # Set the text variable to the goal amount
+            self.txt2.set((round(float(self.data_rows[0][0])/float(self.data_rows[0][2])))*10)  # Set the text variable to the total amount/goal
+            self.txt2.set(self.txt2.get() + '%')  # Append '%' to the total amount/goal
 
-    # Create buttons that print stuff
-    button1 = ttk.Button(mainframe, text='Say durg', command=printer1).grid(column=1, row=2, sticky=E) #Instead of printer1, use the function that the user asked for, make a menu on those files too
-    button2 = ttk.Button(mainframe, text='Say blurg', command=printer2).grid(column=1, row=3, sticky=E)
-    button3 = ttk.Button(mainframe, text='Back to menu', command=printer3).grid(column=1, row=4, sticky=E)
+    def restart_main_menu(self):
+        """Return to the main menu."""
+        self.root.destroy()  # Close the current game window
+        from main import main  # Import the main menu function
+        main()  # Restart the main menu
 
-    # Create label for user instructions
-    ttk.Label(mainframe, text='Please choose a function:').grid(column=2, row=1, sticky=N)
+class Gset:
+    def __init__(self, root, file_path):
+        self.root = root
+        self.file_path = file_path
+        self.txt = tk.StringVar()
 
-    # Create labels to display things
-    ttk.Label(mainframe, textvariable=print1).grid(column=2, row=2, sticky=E)
-    ttk.Label(mainframe, textvariable=print2).grid(column=2, row=3, sticky=E)
+        # Initialize an empty list to store all rows
+        self.data_rows = []
 
-    # Add padding to all child widgets inside 'mainframe' for better spacing
-    for child in mainframe.winfo_children():  
-        child.grid_configure(padx=5, pady=5)
+        # Proceed with using the file path
+        if self.file_path:
+            with open(self.file_path, 'r') as file:
+                reader = csv.reader(file)
+                # Read all rows and store them in self.data_rows
+                self.data_rows = [row for row in reader]
 
-    # Set the default window size (300x300 pixels)
-    root.geometry('300x300')  
+        # Add UI elements
+        self.root.title('Edit Goal')
+        tk.Label(self.root, text='Edit Goal Amount').pack(pady=10)
+        tk.Entry(self.root, textvariable=self.txt).pack(pady=10)
+        tk.Button(self.root, text='Save Goal', command=self.save_goal).pack(pady=10)
+        tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).pack(pady=10)
 
-    # Allow the window to be resized in both width and height
-    root.resizable(True, True)  
+        # Display the current goal amount
+        self.display()
 
-    # Start the Tkinter event loop (keeps the window open and responsive)
-    root.mainloop()
+        # Handle window close event
+        self.root.protocol("WM_DELETE_WINDOW", self.restart_main_menu)
+
+    def display(self):
+        """Display the current goal amount."""
+        if self.data_rows:
+            self.txt.set(self.data_rows[0][2])  # Set the text variable to the current goal amount
+
+    def save_goal(self):
+        """Save the updated goal amount to the file."""
+        try:
+            new_goal = self.txt.get().strip()
+            if not new_goal.isdigit():
+                raise ValueError("Goal amount must be a valid number.")
+
+            # Update the goal amount in the data structure
+            self.data_rows[0][2] = new_goal
+
+            # Write the updated data back to the file
+            with open(self.file_path, 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerows(self.data_rows)
+
+            tk.messagebox.showinfo("Success", "Goal amount updated successfully!")
+            self.restart_main_menu()
+
+        except ValueError as e:
+            tk.messagebox.showerror("Error", str(e))
+
+    def restart_main_menu(self):
+        """Return to the main menu."""
+        self.root.destroy()  # Close the current window
+        from main import main  # Import the main menu function
+        main()
