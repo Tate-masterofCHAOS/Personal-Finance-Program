@@ -1,6 +1,7 @@
 import os
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 from slct_prfl import Slct
 from datetime import datetime
 import csv
@@ -18,26 +19,32 @@ class Baimenu:
         self.endtime = tk.StringVar()
         self.txt2 = tk.StringVar()
         self.txt3 = tk.StringVar()
+        self.is_destroyed = False
 
         self.root.title('Income and Expense Tracking')
 
         # Proceed with using the file path
-        if self.file_path:
-            with open(self.file_path, 'r') as file:
-                data = csv.reader(file)
-                for row in data:
-                    self.whole.append(row)
-            self.income.append(self.whole[2])
-            self.expenses.append(self.whole[3])
+        try:
+            if self.file_path:
+                with open(self.file_path, 'r') as file:
+                    data = csv.reader(file)
+                    for row in data:
+                        self.whole.append(row)
+                self.income.append(self.whole[2])
+                self.expenses.append(self.whole[3])
+        except:
+            tk.messagebox.showerror("Error", "No valid expenses and or income")
+            self.restart_main_menu()
 
-        # Add UI elements
-        tk.Label(self.root, text='Income and Expense Tracking').grid(row=0, column=0, columnspan=2, pady=10, padx=10)
-        tk.Button(self.root, text='Add expenses', command=self.add_expenses).grid(row=1, column=0, pady=10, padx=10)
-        tk.Button(self.root, text='Add income', command=self.add_income).grid(row=1, column=1, pady=10, padx=10)
+        if self.root.winfo_exists():
+            # Add UI elements
+            tk.Label(self.root, text='Income and Expense Tracking').grid(row=0, column=0, columnspan=2, pady=10, padx=10)
+            tk.Button(self.root, text='Add expenses', command=self.add_expenses).grid(row=1, column=0, pady=10, padx=10)
+            tk.Button(self.root, text='Add income', command=self.add_income).grid(row=1, column=1, pady=10, padx=10)
 
-        tk.Button(self.root, text='Income in timeframe', command=self.time_income).grid(row=2, column=0, pady=10, padx=10)
-        tk.Button(self.root, text='Expenses in timeframe', command=self.time_expenses).grid(row=2, column=1, pady=10, padx=10)
-        tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).grid(row=3, column=0, columnspan=2, pady=20, padx=10)
+            tk.Button(self.root, text='Income in timeframe', command=self.time_income).grid(row=2, column=0, pady=10, padx=10)
+            tk.Button(self.root, text='Expenses in timeframe', command=self.time_expenses).grid(row=2, column=1, pady=10, padx=10)
+            tk.Button(self.root, text='Back to Menu', command=self.restart_main_menu).grid(row=3, column=0, columnspan=2, pady=20, padx=10)
 
         # Handle window close event
         self.root.protocol("WM_DELETE_WINDOW", self.restart_main_menu)
@@ -70,7 +77,7 @@ class Baimenu:
                 else:
                     self.listbox.insert(tk.END, item)  # Insert the whole item if no underscore
             except Exception as e:
-                print(f"Error processing item '{item}': {e}")  # Debugging: Print any errors
+                pass
 
     def submit_expense(self):
         """Submit the expense and save it to the file."""
@@ -305,7 +312,7 @@ class Baimenu:
             tk.messagebox.showerror("Error", str(e))
 
     def restart_main_menu(self):
-        """Return to the main menu."""
-        self.root.destroy()  # Close the current game window
-        from main import main  # Import the main menu function
-        main()  # Restart the main menu
+        if self.root.winfo_exists():
+            self.root.destroy()
+        from main import main
+        main()
