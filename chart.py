@@ -89,11 +89,7 @@ class Charts:
         for widget in self.root.winfo_children():
             widget.destroy()  # Clear the current UI
 
-        # Add a label
-        tk.Label(self.root, text="What would you like to do next?").grid(row=0, column=0, columnspan=2, pady=20)
-
         # Add buttons for options
-        tk.Button(self.root, text="Generate Another Chart", command=self.generate_pie_chart, width=20).grid(row=1, column=0, pady=10, padx=10)
         tk.Button(self.root, text="Return to Main Menu", command=self.exit_to_main_menu, width=20).grid(row=1, column=1, pady=10, padx=10)
 
     def exit_to_main_menu(self):
