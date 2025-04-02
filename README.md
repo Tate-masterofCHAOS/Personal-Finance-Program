@@ -3,7 +3,7 @@
 ## Project Desc.
 ---
 
-Paragraph that describes project.  
+This project aims to make financing a little bit easier, by converting currencies, tracking expenses and income, and setting goals! It allows you to generate statistics and graphs all about your account and stores the information for later use, so you can stop running the program any time you please.
 
 
 ## Installation
@@ -15,7 +15,7 @@ NOT USED FOR CLASS.
 ## Execution and Usage
 ---
 
-Paragraph describing how to use this program.  
+This program is driven by Tkinter and uses menus outside of the terminal to run, boxes should only allow certain inputs, just enter what it is requesting.
 ![image](**<relative path here>**) Note, image has to be in repository.  
 
 
@@ -23,14 +23,16 @@ Paragraph describing how to use this program.
 ---
 
 + First library in repo
-`pip install **<name of library>***`  
+`pip install csv`  
 
 + Second library in repo
-`pip install **<name of library>***`  
+`pip install pandas`  
 
 + Third library in repo
-`pip install **<name of library>***`  
-List of all libraries used for the project.  
+`pip install matplotlib`
+
++ Fourth library in repo
+`pip install os`   
 
 
 ## Current Features
@@ -38,9 +40,9 @@ List of all libraries used for the project.
 
 + Windowed menu
 
-+ Main feature two
++ Accurate tracking
 
-+ Main feature three  
++ Editing and making budgets 
 
 
 ## Contributions
@@ -51,9 +53,9 @@ NOT USED FOR CLASS
 ## Contributers
 ---
 
-+ Person who helped with the project, what they did
++ Github Copilot, helped fix issues with Tkinter, and gave some ideas on how to improve
 
-+ Person who helped with the project, what they did
++ Tkinter docs, this helped create the UI for the program, making it come to life outside a dull terminal window
 
 + Person who helped with the project, what they did
 

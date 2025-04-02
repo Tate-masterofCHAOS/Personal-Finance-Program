@@ -19,6 +19,10 @@ ended = 0  # Initialize to 0 to indicate the program is running
 
 
 def main():
+    try:
+        root.destroy
+    except:
+        pass
     global ended  # Declare 'ended' as a global variable
     root = tk.Tk()  # Create the main Tkinter root window
     root.title('Main Menu')  # Set the title of the window
@@ -76,24 +80,9 @@ def main():
     def crt_accnt():
         global ended  # Declare 'ended' as a global variable
         root.destroy()  # Close the current window
-
-        def return_to_menu():
-            main()  # Restart the main menu
-
-        profile_window = tk.Tk()  # Create a new Tkinter root window for profile selection
-        profile_selector = Slct(profile_window, return_to_menu)  # Pass the callback to the Slct class
-        profile_window.wait_window()  # Wait until the profile selection window is closed
-
-        # Retrieve the selected file path
-        file_path = profile_selector.get_selected_file()
-        if not file_path:
-            tk.messagebox.showerror("Error", "No file selected. Returning to the main menu.")
-            main()  # Restart the main menu if no file is selected
-            return
-
         # After the profile selection window is closed, create the new window
         new_root = tk.Tk()
-        CAmenu(new_root, file_path)  # Pass the file_path to the CAmenu class
+        CAmenu(new_root)  # Pass the file_path to the CAmenu class
         ended = 1
 
     def goals_edit():
@@ -163,8 +152,9 @@ def main():
 
     def end_program():
         global ended  # Declare 'ended' as a global variable
-        root.destroy()  # Close the current window
-        ended = 1
+        if not ended:  # Check if the program has not already ended
+            root.destroy()  # Close the current window
+            ended = 1  # Mark the program as ended
 
     def chrts():
         global ended  # Declare 'ended' as a global variable

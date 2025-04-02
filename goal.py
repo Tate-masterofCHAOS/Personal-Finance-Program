@@ -42,7 +42,7 @@ class Gmenu:
         """Display the goal amount from the data."""
         if self.data_rows:
             self.txt.set(self.data_rows[0][2])  # Set the text variable to the goal amount
-            self.txt2.set((round(float(self.data_rows[0][0])/float(self.data_rows[0][2])))*10)  # Set the text variable to the total amount/goal
+            self.txt2.set(round(float(self.data_rows[0][0])/float(self.data_rows[0][2])*100))  # Set the text variable to the total amount/goal
             self.txt2.set(self.txt2.get() + '%')  # Append '%' to the total amount/goal
 
     def restart_main_menu(self):
