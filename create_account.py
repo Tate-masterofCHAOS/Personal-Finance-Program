@@ -165,6 +165,8 @@ class CAmenu:
             writer = csv.writer(file)
             writer.writerow([self.total_amnt.get(), self.type.get(), self.goal_amnt.get(), self.date_access])  # Write the main account data
             writer.writerow(expenses)  # Write the expenses as a separate row
+            writer.writerow('0000-00-00_0_***')
+            writer.writerow('0000-00-00_0_***')
 
         # Show a success message
         tk.messagebox.showinfo("Success", f"Account information and expenses saved to {file_name}!")

@@ -88,21 +88,29 @@ class Cc:
             # Apply the conversion rate to all relevant rows
             self.data_rows[0][0] = round(float(self.data_rows[0][0]) * conversion_rate, 2)  # Update total amount
             self.data_rows[0][1] = new_currency  # Update currency type
+            try:
+                for i in range(len(self.data_rows[1])):  # Update row 2 (expenses)
+                    money, label = self.data_rows[1][i].split('_')
+                    money = round(float(money) * conversion_rate, 2)
+                    self.data_rows[1][i] = f"{money}_{label}"
+            except:
+                messagebox.showinfo("Info", "Budgets is not written")
 
-            for i in range(len(self.data_rows[1])):  # Update row 2 (expenses)
-                money, label = self.data_rows[1][i].split('_')
-                money = round(float(money) * conversion_rate, 2)
-                self.data_rows[1][i] = f"{money}_{label}"
+            try:
+                for i in range(len(self.data_rows[2])):  # Update row 3 (income)
+                    date, money = self.data_rows[2][i].split('_')
+                    money = round(float(money) * conversion_rate, 2)
+                    self.data_rows[2][i] = f"{date}_{money}"
+            except:
+                messagebox.showinfo("Info", "Income is not written")
 
-            for i in range(len(self.data_rows[2])):  # Update row 3 (income)
-                date, money = self.data_rows[2][i].split('_')
-                money = round(float(money) * conversion_rate, 2)
-                self.data_rows[2][i] = f"{date}_{money}"
-
-            for i in range(len(self.data_rows[3])):  # Update row 4 (expenses with dates)
-                date, money = self.data_rows[3][i].split('_')
-                money = round(float(money) * conversion_rate, 2)
-                self.data_rows[3][i] = f"{date}_{money}"
+            try:
+                for i in range(len(self.data_rows[3])):  # Update row 4 (expenses with dates)
+                    date, money = self.data_rows[3][i].split('_')
+                    money = round(float(money) * conversion_rate, 2)
+                    self.data_rows[3][i] = f"{date}_{money}"
+            except:
+                messagebox.showinfo("Info", "Expenses are not written")
 
             # Write the updated data back to the CSV file
             with open(self.file_path, 'w', newline='') as file:
