@@ -16,7 +16,7 @@ from budgetting import Budge, Budge_shw
 
 # Global variable to track program state
 ended = 0  # Initialize to 0 to indicate the program is running
-
+restart = 0
 
 def main():
     try:
@@ -143,12 +143,16 @@ def main():
         # Add the "Check goal" and "Edit goal" buttons
         ttk.Button(goals_frame, text='Check goal', command=goals_view).grid(column=0, row=1)
         ttk.Button(goals_frame, text='Edit goal', command=goals_edit).grid(column=1, row=1)
+        ttk.Button(goals_frame, text='Menu', command=restart).grid(column=2, row=1)
 
         ttk.Label(goals_frame, text='Goals').grid(column=0, row=0, columnspan=2, pady = 20, padx=20)
 
         # Add padding to all child widgets inside 'goals_frame'
         for child in goals_frame.winfo_children():
             child.grid_configure(padx=5, pady=5)
+
+    def restart():
+        current_file_path = os.path.abspath(__file__)
 
     def end_program():
         global ended  # Declare 'ended' as a global variable
@@ -284,7 +288,7 @@ def main():
     ttk.Button(mainframe, text='Create an Account', command=crt_accnt).grid(column=2, row=3)
     ttk.Button(mainframe, text='Goals', command=goals).grid(column=3, row=2)
     ttk.Button(mainframe, text='Change currency', command=Chnge_curr).grid(column=3, row=3)
-    ttk.Button(mainframe, text='Budgetting', command=budgt_menu).grid(column=1, row=4)
+    ttk.Button(mainframe, text='Budgeting', command=budgt_menu).grid(column=1, row=4)
     ttk.Button(mainframe, text='Close', command=end_program).grid(column=2, row=8)
 
     # Add a label for user instructions
@@ -296,9 +300,12 @@ def main():
 
     # Start the Tkinter event loop
     root.mainloop()
-    return ended
+    return ended, restart
 
 
 if __name__ == "__main__":
+    if restart == 1:
+        restart = 0
+        ended, restart = main()
     while ended == 0:
-        ended = main()  # Call the main function to run the application
+        ended, restart = main()  # Call the main function to run the application

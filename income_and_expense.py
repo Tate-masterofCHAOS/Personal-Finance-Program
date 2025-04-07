@@ -24,16 +24,22 @@ class Baimenu:
         self.root.title('Income and Expense Tracking')
 
         # Proceed with using the file path
-        try:
-            if self.file_path:
-                with open(self.file_path, 'r') as file:
-                    data = csv.reader(file)
-                    for row in data:
-                        self.whole.append(row)
+        if self.file_path:
+            with open(self.file_path, 'r') as file:
+                data = csv.reader(file)
+                for row in data:
+                    self.whole.append(row)
+            try:
                 self.income.append(self.whole[2])
+            except:
+                self.income = []
+                self.is_valid = False
+            try:
                 self.expenses.append(self.whole[3])
-        except:
-            self.is_valid = False
+            except:
+                self.expenses = []
+                self.is_valid = False
+        
 
         # Add UI elements
         tk.Label(self.root, text='Income and Expense Tracking').grid(row=0, column=0, columnspan=2, pady=10, padx=10)
@@ -170,10 +176,10 @@ class Baimenu:
             # Filter income entries within the date range
             filtered_income = []
             for entry in self.income[0]:  # Assuming self.income[0] contains income entries
-                date_str, amount = entry.split("_")  # Split the entry into date and amount
+                date_str, amount, type = entry.split("_")  # Split the entry into date and amount
                 entry_date = datetime.strptime(date_str, "%Y-%m-%d")
                 if start_date_obj <= entry_date <= end_date_obj:
-                    filtered_income.append(f"{date_str}: {amount}")
+                    filtered_income.append(f"{date_str}: {amount}: {type}")
 
             # Clear the current UI
             for widget in self.root.winfo_children():
@@ -185,7 +191,10 @@ class Baimenu:
             income_listbox.grid(row=1, column=0, columnspan=2, pady=10)
 
             for income in filtered_income:
-                income_listbox.insert(tk.END, income)
+                if income == '0000-00-00: 0: ***':
+                    continue
+                else:
+                    income_listbox.insert(tk.END, income)
 
             # Add a back button
             tk.Button(self.root, text="Back", command=self.restart_main_menu).grid(row=2, column=0, columnspan=2, pady=10)
@@ -202,10 +211,10 @@ class Baimenu:
             # Filter expense entries within the date range
             filtered_expenses = []
             for entry in self.expenses[0]:  # Assuming self.expenses[0] contains expense entries
-                date_str, amount = entry.split("_")  # Split the entry into date and amount
+                date_str, amount, type= entry.split("_")  # Split the entry into date and amount
                 entry_date = datetime.strptime(date_str, "%Y-%m-%d")
                 if start_date_obj <= entry_date <= end_date_obj:
-                    filtered_expenses.append(f"{date_str}: {amount}")
+                    filtered_expenses.append(f"{date_str}: {amount}: {type}")
 
             # Clear the current UI
             for widget in self.root.winfo_children():
@@ -217,7 +226,10 @@ class Baimenu:
             expenses_listbox.grid(row=1, column=0, columnspan=2, pady=10)
 
             for expense in filtered_expenses:
-                expenses_listbox.insert(tk.END, expense)
+                if expense == '0000-00-00: 0: ***':
+                    continue
+                else:
+                    expenses_listbox.insert(tk.END, expense)
 
             # Add a back button
             tk.Button(self.root, text="Back", command=self.restart_main_menu).grid(row=2, column=0, columnspan=2, pady=10)
@@ -242,7 +254,7 @@ class Baimenu:
 
         # Start date selection
         tk.Label(self.root, text="Year:").grid(row=1, column=0, padx=5, pady=5)
-        start_year_combo = ttk.Combobox(self.root, values=[str(i) for i in range(2000, datetime.now().year + 1)], state="readonly", width=5)
+        start_year_combo = ttk.Combobox(self.root, values=[str(i) for i in range(1700, datetime.now().year + 1)], state="readonly", width=5)
         start_year_combo.grid(row=1, column=1, padx=5, pady=5)
         start_year_combo.set(datetime.now().strftime("%Y"))
 
@@ -260,7 +272,7 @@ class Baimenu:
 
         # End date selection
         tk.Label(self.root, text="Year:").grid(row=5, column=0, padx=5, pady=5)
-        end_year_combo = ttk.Combobox(self.root, values=[str(i) for i in range(2000, datetime.now().year + 1)], state="readonly", width=5)
+        end_year_combo = ttk.Combobox(self.root, values=[str(i) for i in range(1700, datetime.now().year + 1)], state="readonly", width=5)
         end_year_combo.grid(row=5, column=1, padx=5, pady=5)
         end_year_combo.set(datetime.now().strftime("%Y"))
 
