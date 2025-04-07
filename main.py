@@ -13,6 +13,7 @@ from slct_prfl import Slct
 from change_currency import Cc
 from budgetting import Budge, Budge_shw
 
+#elloS
 
 # Global variable to track program state
 ended = 0  # Initialize to 0 to indicate the program is running
@@ -288,7 +289,7 @@ def main():
     ttk.Button(mainframe, text='Create an Account', command=crt_accnt).grid(column=2, row=3)
     ttk.Button(mainframe, text='Goals', command=goals).grid(column=3, row=2)
     ttk.Button(mainframe, text='Change currency', command=Chnge_curr).grid(column=3, row=3)
-    ttk.Button(mainframe, text='Budgetting', command=budgt_menu).grid(column=1, row=4)
+    ttk.Button(mainframe, text='Budgeting', command=budgt_menu).grid(column=1, row=4)
     ttk.Button(mainframe, text='Close', command=end_program).grid(column=2, row=8)
 
     # Add a label for user instructions
